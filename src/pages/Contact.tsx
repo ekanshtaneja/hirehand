@@ -12,7 +12,8 @@ import {
   Clock, 
   MessageSquare,
   Send,
-  CheckCircle
+  CheckCircle,
+  Star
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -20,23 +21,23 @@ const contactMethods = [
   {
     icon: Phone,
     title: "Phone Support",
-    details: "(555) 123-4567",
-    description: "Mon-Fri 9AM-6PM EST",
+    details: "7973180034",
+    description: "Available for urgent matters",
     action: "Call Now"
   },
   {
     icon: Mail,
     title: "Email Support",
-    details: "support@hirehand.com",
+    details: "tanejas1000@gmail.com",
     description: "We'll respond within 24 hours",
     action: "Send Email"
   },
   {
     icon: MapPin,
-    title: "Office Location",
-    details: "123 Construction Ave, NYC",
-    description: "By appointment only",
-    action: "Get Directions"
+    title: "Location",
+    details: "India",
+    description: "Remote consultation available",
+    action: "Contact Us"
   }
 ];
 
@@ -47,6 +48,12 @@ export default function Contact() {
     subject: "",
     message: "",
     inquiryType: ""
+  });
+  const [reviewData, setReviewData] = useState({
+    name: "",
+    email: "",
+    rating: "",
+    review: ""
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
   const { toast } = useToast();
@@ -70,6 +77,34 @@ export default function Contact() {
     toast({
       title: "Message Sent",
       description: "Thank you for your message! We'll get back to you soon.",
+    });
+  };
+
+  const handleReviewSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!reviewData.name || !reviewData.email || !reviewData.rating || !reviewData.review) {
+      toast({
+        title: "Incomplete Review",
+        description: "Please fill in all required fields.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Submit review (mock)
+    console.log("Review submitted:", reviewData);
+    
+    toast({
+      title: "Review Submitted",
+      description: "Thank you for your feedback! Your review helps us improve.",
+    });
+    
+    setReviewData({
+      name: "",
+      email: "",
+      rating: "",
+      review: ""
     });
   };
 
@@ -111,7 +146,7 @@ export default function Contact() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
           {/* Contact Methods */}
           <div className="space-y-8">
             <div>
@@ -175,6 +210,86 @@ export default function Contact() {
                     <span className="font-medium">Closed</span>
                   </div>
                 </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Review Section */}
+          <div>
+            <Card className="shadow-elevated border-0 animate-slide-up">
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Star className="mr-2 h-5 w-5" />
+                  Leave a Review
+                </CardTitle>
+                <p className="text-muted-foreground">
+                  Share your experience with HireHand to help us improve our services.
+                </p>
+              </CardHeader>
+              <CardContent>
+                <form onSubmit={handleReviewSubmit} className="space-y-6">
+                  {/* Name & Email */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="reviewName">Name *</Label>
+                      <Input
+                        id="reviewName"
+                        value={reviewData.name}
+                        onChange={(e) => setReviewData({...reviewData, name: e.target.value})}
+                        placeholder="Your name"
+                        className="mt-2"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="reviewEmail">Email *</Label>
+                      <Input
+                        id="reviewEmail"
+                        type="email"
+                        value={reviewData.email}
+                        onChange={(e) => setReviewData({...reviewData, email: e.target.value})}
+                        placeholder="your@email.com"
+                        className="mt-2"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  {/* Rating */}
+                  <div>
+                    <Label htmlFor="rating">Rating *</Label>
+                    <Select value={reviewData.rating} onValueChange={(value) => setReviewData({...reviewData, rating: value})}>
+                      <SelectTrigger className="mt-2">
+                        <SelectValue placeholder="Rate your experience" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="5">⭐⭐⭐⭐⭐ Excellent</SelectItem>
+                        <SelectItem value="4">⭐⭐⭐⭐ Very Good</SelectItem>
+                        <SelectItem value="3">⭐⭐⭐ Good</SelectItem>
+                        <SelectItem value="2">⭐⭐ Fair</SelectItem>
+                        <SelectItem value="1">⭐ Poor</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  {/* Review */}
+                  <div>
+                    <Label htmlFor="review">Your Review *</Label>
+                    <Textarea
+                      id="review"
+                      value={reviewData.review}
+                      onChange={(e) => setReviewData({...reviewData, review: e.target.value})}
+                      placeholder="Tell us about your experience with HireHand..."
+                      className="mt-2 min-h-[120px]"
+                      required
+                    />
+                  </div>
+
+                  <Button type="submit" className="w-full" size="lg">
+                    <Star className="mr-2 h-4 w-4" />
+                    Submit Review
+                  </Button>
+                </form>
               </CardContent>
             </Card>
           </div>
