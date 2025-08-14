@@ -1,43 +1,17 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Linkedin, Twitter, Mail } from "lucide-react";
+import { Linkedin, Instagram, Mail, Phone } from "lucide-react";
 
 const teamMembers = [
   {
-    name: "Sarah Chen",
-    role: "CEO & Founder",
-    bio: "Former construction project manager with 15+ years in the industry. Sarah founded HireHand to solve the trust and transparency issues she experienced firsthand.",
+    name: "Ekansh Taneja",
+    role: "Founder & CEO",
+    bio: "Passionate entrepreneur building the future of construction marketplace. Dedicated to connecting skilled professionals with homeowners who need quality work.",
     image: "/placeholder.svg",
     linkedin: "#",
-    twitter: "#",
-    email: "sarah@hirehand.com"
-  },
-  {
-    name: "Marcus Rodriguez",
-    role: "CTO",
-    bio: "Technology leader with expertise in marketplace platforms and mobile applications. Previously led engineering teams at major tech companies.",
-    image: "/placeholder.svg",
-    linkedin: "#",
-    twitter: "#",
-    email: "marcus@hirehand.com"
-  },
-  {
-    name: "Emma Thompson",
-    role: "Head of Operations",
-    bio: "Operations expert focused on professional vetting and quality assurance. Ensures every professional meets our high standards.",
-    image: "/placeholder.svg",
-    linkedin: "#",
-    twitter: "#",
-    email: "emma@hirehand.com"
-  },
-  {
-    name: "David Kim",
-    role: "Head of Product",
-    bio: "Product strategist passionate about user experience and marketplace dynamics. Leads product development and customer research.",
-    image: "/placeholder.svg",
-    linkedin: "#",
-    twitter: "#",
-    email: "david@hirehand.com"
+    instagram: "https://www.instagram.com/ek_taneja/",
+    email: "tanejas1000@gmail.com",
+    phone: "7973180034"
   }
 ];
 
@@ -48,11 +22,10 @@ export default function Team() {
         {/* Header */}
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-            Meet Our Team
+            Meet Our Founder
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            We're a passionate team of construction industry veterans and technology experts 
-            dedicated to connecting skilled professionals with homeowners who need quality work.
+            Passionate about revolutionizing the construction industry by connecting skilled professionals with homeowners who need quality work.
           </p>
         </div>
 
@@ -72,7 +45,8 @@ export default function Team() {
         </Card>
 
         {/* Team Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+        <div className="flex justify-center mb-16">
+          <div className="max-w-md w-full">
           {teamMembers.map((member, index) => (
             <Card 
               key={index} 
@@ -105,13 +79,8 @@ export default function Team() {
                 {/* Social Links */}
                 <div className="flex justify-center space-x-3">
                   <Button variant="ghost" size="icon" asChild>
-                    <a href={member.linkedin} target="_blank" rel="noopener noreferrer">
-                      <Linkedin className="h-4 w-4" />
-                    </a>
-                  </Button>
-                  <Button variant="ghost" size="icon" asChild>
-                    <a href={member.twitter} target="_blank" rel="noopener noreferrer">
-                      <Twitter className="h-4 w-4" />
+                    <a href={member.instagram} target="_blank" rel="noopener noreferrer">
+                      <Instagram className="h-4 w-4" />
                     </a>
                   </Button>
                   <Button variant="ghost" size="icon" asChild>
@@ -119,10 +88,16 @@ export default function Team() {
                       <Mail className="h-4 w-4" />
                     </a>
                   </Button>
+                  <Button variant="ghost" size="icon" asChild>
+                    <a href={`tel:${member.phone}`}>
+                      <Phone className="h-4 w-4" />
+                    </a>
+                  </Button>
                 </div>
               </CardContent>
             </Card>
-          ))}
+            ))}
+          </div>
         </div>
 
         {/* Company Values */}
