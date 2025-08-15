@@ -23,9 +23,11 @@ export const Navigation = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2 group">
-            <div className="p-2 gradient-hero rounded-lg shadow-construction group-hover:shadow-elevated transition-smooth">
-              <HardHat className="h-6 w-6 text-white" />
-            </div>
+            <img 
+              src="/lovable-uploads/f79fa9ee-03b6-4aee-9caa-8ec0cbc158f6.png" 
+              alt="HireHand Construction Logo" 
+              className="h-10 w-10 group-hover:scale-105 transition-smooth"
+            />
             <span className="text-xl font-bold text-foreground">HireHand</span>
           </Link>
 

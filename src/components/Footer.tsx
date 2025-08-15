@@ -9,9 +9,11 @@ export const Footer = () => {
           {/* Brand */}
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center space-x-2 mb-4">
-              <div className="p-2 bg-white/10 rounded-lg">
-                <HardHat className="h-6 w-6 text-white" />
-              </div>
+              <img 
+                src="/lovable-uploads/f79fa9ee-03b6-4aee-9caa-8ec0cbc158f6.png" 
+                alt="HireHand Construction Logo" 
+                className="h-8 w-8"
+              />
               <span className="text-xl font-bold">HireHand</span>
             </div>
             <p className="text-white/80 mb-4 max-w-md">
