@@ -5,42 +5,27 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { 
-  Phone, 
-  Mail, 
-  MapPin, 
-  Clock, 
-  MessageSquare,
-  Send,
-  CheckCircle,
-  Star
-} from "lucide-react";
+import { Phone, Mail, MapPin, Clock, MessageSquare, Send, CheckCircle, Star } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-
-const contactMethods = [
-  {
-    icon: Phone,
-    title: "Phone Support",
-    details: "7973180034",
-    description: "Available for urgent matters",
-    action: "Call Now"
-  },
-  {
-    icon: Mail,
-    title: "Email Support",
-    details: "tanejas1000@gmail.com",
-    description: "We'll respond within 24 hours",
-    action: "Send Email"
-  },
-  {
-    icon: MapPin,
-    title: "Location",
-    details: "India",
-    description: "Remote consultation available",
-    action: "Contact Us"
-  }
-];
-
+const contactMethods = [{
+  icon: Phone,
+  title: "Phone Support",
+  details: "7973180034",
+  description: "Available for urgent matters",
+  action: "Call Now"
+}, {
+  icon: Mail,
+  title: "Email Support",
+  details: "tanejas1000@gmail.com",
+  description: "We'll respond within 24 hours",
+  action: "Send Email"
+}, {
+  icon: MapPin,
+  title: "Location",
+  details: "India",
+  description: "Remote consultation available",
+  action: "Contact Us"
+}];
 export default function Contact() {
   const [formData, setFormData] = useState({
     name: "",
@@ -56,16 +41,16 @@ export default function Contact() {
     review: ""
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const { toast } = useToast();
-
+  const {
+    toast
+  } = useToast();
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
     if (!formData.name || !formData.email || !formData.message || !formData.inquiryType) {
       toast({
         title: "Incomplete Form",
         description: "Please fill in all required fields.",
-        variant: "destructive",
+        variant: "destructive"
       });
       return;
     }
@@ -73,33 +58,28 @@ export default function Contact() {
     // Submit form (mock)
     console.log("Contact form submitted:", formData);
     setIsSubmitted(true);
-    
     toast({
       title: "Message Sent",
-      description: "Thank you for your message! We'll get back to you soon.",
+      description: "Thank you for your message! We'll get back to you soon."
     });
   };
-
   const handleReviewSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
     if (!reviewData.name || !reviewData.email || !reviewData.rating || !reviewData.review) {
       toast({
         title: "Incomplete Review",
         description: "Please fill in all required fields.",
-        variant: "destructive",
+        variant: "destructive"
       });
       return;
     }
 
     // Submit review (mock)
     console.log("Review submitted:", reviewData);
-    
     toast({
       title: "Review Submitted",
-      description: "Thank you for your feedback! Your review helps us improve.",
+      description: "Thank you for your feedback! Your review helps us improve."
     });
-    
     setReviewData({
       name: "",
       email: "",
@@ -107,10 +87,8 @@ export default function Contact() {
       review: ""
     });
   };
-
   if (isSubmitted) {
-    return (
-      <div className="min-h-screen bg-gradient-to-b from-background to-accent/20 flex items-center justify-center py-12">
+    return <div className="min-h-screen bg-gradient-to-b from-background to-accent/20 flex items-center justify-center py-12">
         <Card className="w-full max-w-md shadow-elevated border-0 text-center">
           <CardContent className="p-12">
             <div className="p-4 gradient-hero rounded-full w-fit mx-auto mb-6">
@@ -128,12 +106,9 @@ export default function Contact() {
             </Button>
           </CardContent>
         </Card>
-      </div>
-    );
+      </div>;
   }
-
-  return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-accent/20 py-12">
+  return <div className="min-h-screen bg-gradient-to-b from-background to-accent/20 py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
@@ -155,12 +130,9 @@ export default function Contact() {
               </h2>
               
               <div className="space-y-6">
-                {contactMethods.map((method, index) => (
-                  <Card 
-                    key={index} 
-                    className="shadow-card border-0 group hover:shadow-elevated transition-smooth animate-slide-up"
-                    style={{ animationDelay: `${index * 100}ms` }}
-                  >
+                {contactMethods.map((method, index) => <Card key={index} className="shadow-card border-0 group hover:shadow-elevated transition-smooth animate-slide-up" style={{
+                animationDelay: `${index * 100}ms`
+              }}>
                     <CardContent className="p-6">
                       <div className="flex items-start space-x-4">
                         <div className="p-3 gradient-hero rounded-lg shadow-construction">
@@ -182,36 +154,12 @@ export default function Contact() {
                         </div>
                       </div>
                     </CardContent>
-                  </Card>
-                ))}
+                  </Card>)}
               </div>
             </div>
 
             {/* Office Hours */}
-            <Card className="shadow-card border-0 animate-slide-up">
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <Clock className="mr-2 h-5 w-5" />
-                  Office Hours
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Monday - Friday</span>
-                    <span className="font-medium">9:00 AM - 6:00 PM EST</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Saturday</span>
-                    <span className="font-medium">10:00 AM - 4:00 PM EST</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Sunday</span>
-                    <span className="font-medium">Closed</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            
           </div>
 
           {/* Review Section */}
@@ -232,33 +180,27 @@ export default function Contact() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <Label htmlFor="reviewName">Name *</Label>
-                      <Input
-                        id="reviewName"
-                        value={reviewData.name}
-                        onChange={(e) => setReviewData({...reviewData, name: e.target.value})}
-                        placeholder="Your name"
-                        className="mt-2"
-                        required
-                      />
+                      <Input id="reviewName" value={reviewData.name} onChange={e => setReviewData({
+                      ...reviewData,
+                      name: e.target.value
+                    })} placeholder="Your name" className="mt-2" required />
                     </div>
                     <div>
                       <Label htmlFor="reviewEmail">Email *</Label>
-                      <Input
-                        id="reviewEmail"
-                        type="email"
-                        value={reviewData.email}
-                        onChange={(e) => setReviewData({...reviewData, email: e.target.value})}
-                        placeholder="your@email.com"
-                        className="mt-2"
-                        required
-                      />
+                      <Input id="reviewEmail" type="email" value={reviewData.email} onChange={e => setReviewData({
+                      ...reviewData,
+                      email: e.target.value
+                    })} placeholder="your@email.com" className="mt-2" required />
                     </div>
                   </div>
 
                   {/* Rating */}
                   <div>
                     <Label htmlFor="rating">Rating *</Label>
-                    <Select value={reviewData.rating} onValueChange={(value) => setReviewData({...reviewData, rating: value})}>
+                    <Select value={reviewData.rating} onValueChange={value => setReviewData({
+                    ...reviewData,
+                    rating: value
+                  })}>
                       <SelectTrigger className="mt-2">
                         <SelectValue placeholder="Rate your experience" />
                       </SelectTrigger>
@@ -275,14 +217,10 @@ export default function Contact() {
                   {/* Review */}
                   <div>
                     <Label htmlFor="review">Your Review *</Label>
-                    <Textarea
-                      id="review"
-                      value={reviewData.review}
-                      onChange={(e) => setReviewData({...reviewData, review: e.target.value})}
-                      placeholder="Tell us about your experience with HireHand..."
-                      className="mt-2 min-h-[120px]"
-                      required
-                    />
+                    <Textarea id="review" value={reviewData.review} onChange={e => setReviewData({
+                    ...reviewData,
+                    review: e.target.value
+                  })} placeholder="Tell us about your experience with HireHand..." className="mt-2 min-h-[120px]" required />
                   </div>
 
                   <Button type="submit" className="w-full" size="lg">
@@ -312,33 +250,27 @@ export default function Contact() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <Label htmlFor="name">Name *</Label>
-                      <Input
-                        id="name"
-                        value={formData.name}
-                        onChange={(e) => setFormData({...formData, name: e.target.value})}
-                        placeholder="Your full name"
-                        className="mt-2"
-                        required
-                      />
+                      <Input id="name" value={formData.name} onChange={e => setFormData({
+                      ...formData,
+                      name: e.target.value
+                    })} placeholder="Your full name" className="mt-2" required />
                     </div>
                     <div>
                       <Label htmlFor="email">Email *</Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        value={formData.email}
-                        onChange={(e) => setFormData({...formData, email: e.target.value})}
-                        placeholder="your@email.com"
-                        className="mt-2"
-                        required
-                      />
+                      <Input id="email" type="email" value={formData.email} onChange={e => setFormData({
+                      ...formData,
+                      email: e.target.value
+                    })} placeholder="your@email.com" className="mt-2" required />
                     </div>
                   </div>
 
                   {/* Inquiry Type */}
                   <div>
                     <Label htmlFor="inquiryType">Inquiry Type *</Label>
-                    <Select value={formData.inquiryType} onValueChange={(value) => setFormData({...formData, inquiryType: value})}>
+                    <Select value={formData.inquiryType} onValueChange={value => setFormData({
+                    ...formData,
+                    inquiryType: value
+                  })}>
                       <SelectTrigger className="mt-2">
                         <SelectValue placeholder="What can we help you with?" />
                       </SelectTrigger>
@@ -356,26 +288,19 @@ export default function Contact() {
                   {/* Subject */}
                   <div>
                     <Label htmlFor="subject">Subject</Label>
-                    <Input
-                      id="subject"
-                      value={formData.subject}
-                      onChange={(e) => setFormData({...formData, subject: e.target.value})}
-                      placeholder="Brief description of your inquiry"
-                      className="mt-2"
-                    />
+                    <Input id="subject" value={formData.subject} onChange={e => setFormData({
+                    ...formData,
+                    subject: e.target.value
+                  })} placeholder="Brief description of your inquiry" className="mt-2" />
                   </div>
 
                   {/* Message */}
                   <div>
                     <Label htmlFor="message">Message *</Label>
-                    <Textarea
-                      id="message"
-                      value={formData.message}
-                      onChange={(e) => setFormData({...formData, message: e.target.value})}
-                      placeholder="Please provide details about your inquiry..."
-                      className="mt-2 min-h-[120px]"
-                      required
-                    />
+                    <Textarea id="message" value={formData.message} onChange={e => setFormData({
+                    ...formData,
+                    message: e.target.value
+                  })} placeholder="Please provide details about your inquiry..." className="mt-2 min-h-[120px]" required />
                   </div>
 
                   <Button type="submit" className="w-full" size="lg">
@@ -388,6 +313,5 @@ export default function Contact() {
           </div>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 }
