@@ -20,9 +20,9 @@ export const Hero = () => {
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
         <div className="animate-slide-up">
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
-            Your Project,{" "}
+            Your Construction,{" "}
             <span className="text-transparent bg-clip-text gradient-hero">
-              Your Pro
+              Your Choice
             </span>
             , Your Price
           </h1>
