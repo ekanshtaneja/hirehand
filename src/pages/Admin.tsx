@@ -19,25 +19,20 @@ import { useToast } from "@/hooks/use-toast";
 
 const ADMIN_PASSWORD = "admin123"; // In real app, this would be properly secured
 
-// Mock data
+// Mock data - starting with zeros for new website
 const analyticsData = {
-  totalVisitors: 2843,
-  professionals: 156,
-  newProfessionals: 23,
-  weeklyVisitors: [120, 180, 240, 190, 280, 350, 410],
+  totalVisitors: 0,
+  professionals: 0,
+  newProfessionals: 0,
+  weeklyVisitors: [0, 0, 0, 0, 0, 0, 0],
 };
 
-const newProfessionals = [
-  { name: "John Smith", email: "john@example.com", specialty: "Plumbing", date: "2024-01-15" },
-  { name: "Lisa Johnson", email: "lisa@example.com", specialty: "Electrical", date: "2024-01-14" },
-  { name: "Mike Wilson", email: "mike@example.com", specialty: "Carpentry", date: "2024-01-13" },
+const newProfessionals: Array<{ name: string; email: string; specialty: string; date: string }> = [
+  // Will populate when professionals register
 ];
 
-const recentQuotes = [
-  { service: "Painting", location: "Brooklyn, NY", budget: "$500", date: "2024-01-15" },
-  { service: "Plumbing", location: "Manhattan, NY", budget: "$300", date: "2024-01-15" },
-  { service: "Electrical", location: "Queens, NY", budget: "$800", date: "2024-01-14" },
-  { service: "Carpentry", location: "Bronx, NY", budget: "$1200", date: "2024-01-14" },
+const recentQuotes: Array<{ service: string; location: string; budget: string; date: string }> = [
+  // Will populate when quote requests come in
 ];
 
 export default function Admin() {
