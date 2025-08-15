@@ -14,7 +14,108 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      analytics: {
+        Row: {
+          created_at: string
+          id: string
+          page_path: string
+          user_agent: string | null
+          visitor_ip: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          page_path: string
+          user_agent?: string | null
+          visitor_ip?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          page_path?: string
+          user_agent?: string | null
+          visitor_ip?: string | null
+        }
+        Relationships: []
+      }
+      professionals: {
+        Row: {
+          created_at: string
+          description: string | null
+          email: string
+          experience: string | null
+          id: string
+          location: string | null
+          name: string
+          phone: string | null
+          specialty: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          email: string
+          experience?: string | null
+          id?: string
+          location?: string | null
+          name: string
+          phone?: string | null
+          specialty: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          email?: string
+          experience?: string | null
+          id?: string
+          location?: string | null
+          name?: string
+          phone?: string | null
+          specialty?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      quote_requests: {
+        Row: {
+          budget: string | null
+          created_at: string
+          description: string | null
+          email: string
+          id: string
+          location: string
+          name: string
+          phone: string | null
+          service: string
+          updated_at: string
+        }
+        Insert: {
+          budget?: string | null
+          created_at?: string
+          description?: string | null
+          email: string
+          id?: string
+          location: string
+          name: string
+          phone?: string | null
+          service: string
+          updated_at?: string
+        }
+        Update: {
+          budget?: string | null
+          created_at?: string
+          description?: string | null
+          email?: string
+          id?: string
+          location?: string
+          name?: string
+          phone?: string | null
+          service?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
