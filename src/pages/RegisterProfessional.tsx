@@ -17,6 +17,7 @@ import {
   Briefcase
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const benefits = [
   {
@@ -66,7 +67,7 @@ export default function RegisterProfessional() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const { toast } = useToast();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     // Validate form
@@ -79,14 +80,34 @@ export default function RegisterProfessional() {
       return;
     }
 
-    // Submit form (mock)
-    console.log("Professional registration:", formData);
-    setIsSubmitted(true);
-    
-    toast({
-      title: "Registration Submitted",
-      description: "Thank you for joining HireHand! We'll review your application and get back to you soon.",
-    });
+    try {
+      // Save to database
+      const { error } = await supabase
+        .from('professionals')
+        .insert({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          specialty: formData.specialty,
+          description: formData.bio,
+        });
+
+      if (error) throw error;
+
+      setIsSubmitted(true);
+      
+      toast({
+        title: "Registration Submitted",
+        description: "Thank you for joining HireHand! We'll review your application and get back to you soon.",
+      });
+    } catch (error) {
+      console.error('Error submitting registration:', error);
+      toast({
+        title: "Submission Failed",
+        description: "There was an error submitting your registration. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   if (isSubmitted) {

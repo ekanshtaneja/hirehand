@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { ArrowLeft, Bot, DollarSign, AlertCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 // Mock AI pricing function
 const getAIPrice = async (data: any): Promise<{price: string, justification: string}> => {
@@ -52,6 +53,9 @@ export default function GetQuote() {
     style: "",
     location: "",
     requirements: "",
+    name: "",
+    email: "",
+    phone: "",
   });
   const [aiPrice, setAiPrice] = useState<{price: string, justification: string} | null>(null);
   const [isLoadingAI, setIsLoadingAI] = useState(false);
@@ -85,9 +89,9 @@ export default function GetQuote() {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.style || !formData.location || !formData.requirements) {
+    if (!formData.style || !formData.location || !formData.requirements || !formData.name || !formData.email) {
       toast({
         title: "Incomplete Form",
         description: "Please fill in all required fields.",
@@ -96,13 +100,37 @@ export default function GetQuote() {
       return;
     }
     
-    toast({
-      title: "Quote Request Submitted",
-      description: "We'll connect you with professionals in your area!",
-    });
-    
-    // Navigate to quotes page with form data
-    window.location.href = "/quotes";
+    try {
+      // Save quote request to database
+      const { error } = await supabase
+        .from('quote_requests')
+        .insert({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          service: formData.service,
+          location: formData.location,
+          description: `${formData.style} style. ${formData.requirements}`,
+          budget: aiPrice?.price || null,
+        });
+
+      if (error) throw error;
+      
+      toast({
+        title: "Quote Request Submitted",
+        description: "We'll connect you with professionals in your area!",
+      });
+      
+      // Navigate to quotes page with form data
+      window.location.href = "/quotes";
+    } catch (error) {
+      console.error('Error submitting quote request:', error);
+      toast({
+        title: "Submission Failed",
+        description: "There was an error submitting your quote request. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -154,20 +182,68 @@ export default function GetQuote() {
                     </RadioGroup>
                   </div>
 
-                  {/* Location */}
-                  <div>
-                    <Label htmlFor="location" className="text-base font-medium">
-                      Project Location *
-                    </Label>
-                    <Input
-                      id="location"
-                      value={formData.location}
-                      onChange={(e) => setFormData({...formData, location: e.target.value})}
-                      placeholder="e.g., New York City, NY"
-                      className="mt-2"
-                      required
-                    />
-                  </div>
+                   {/* Contact Information */}
+                   <div className="space-y-4">
+                     <h3 className="text-lg font-medium">Contact Information</h3>
+                     
+                     <div>
+                       <Label htmlFor="name" className="text-base font-medium">
+                         Your Name *
+                       </Label>
+                       <Input
+                         id="name"
+                         value={formData.name}
+                         onChange={(e) => setFormData({...formData, name: e.target.value})}
+                         placeholder="Full Name"
+                         className="mt-2"
+                         required
+                       />
+                     </div>
+
+                     <div>
+                       <Label htmlFor="email" className="text-base font-medium">
+                         Email Address *
+                       </Label>
+                       <Input
+                         id="email"
+                         type="email"
+                         value={formData.email}
+                         onChange={(e) => setFormData({...formData, email: e.target.value})}
+                         placeholder="your@email.com"
+                         className="mt-2"
+                         required
+                       />
+                     </div>
+
+                     <div>
+                       <Label htmlFor="phone" className="text-base font-medium">
+                         Phone Number
+                       </Label>
+                       <Input
+                         id="phone"
+                         type="tel"
+                         value={formData.phone}
+                         onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                         placeholder="(555) 123-4567"
+                         className="mt-2"
+                       />
+                     </div>
+                   </div>
+
+                   {/* Location */}
+                   <div>
+                     <Label htmlFor="location" className="text-base font-medium">
+                       Project Location *
+                     </Label>
+                     <Input
+                       id="location"
+                       value={formData.location}
+                       onChange={(e) => setFormData({...formData, location: e.target.value})}
+                       placeholder="e.g., New York City, NY"
+                       className="mt-2"
+                       required
+                     />
+                   </div>
 
                   {/* Requirements */}
                   <div>
