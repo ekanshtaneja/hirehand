@@ -44,6 +44,7 @@ export type Database = {
           description: string | null
           email: string
           experience: string | null
+          hourly_rate: string | null
           id: string
           location: string | null
           name: string
@@ -57,6 +58,7 @@ export type Database = {
           description?: string | null
           email: string
           experience?: string | null
+          hourly_rate?: string | null
           id?: string
           location?: string | null
           name: string
@@ -70,6 +72,7 @@ export type Database = {
           description?: string | null
           email?: string
           experience?: string | null
+          hourly_rate?: string | null
           id?: string
           location?: string | null
           name?: string
@@ -118,6 +121,47 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      reviews: {
+        Row: {
+          client_email: string
+          client_name: string
+          comment: string | null
+          created_at: string
+          id: string
+          professional_id: string
+          rating: number
+          updated_at: string
+        }
+        Insert: {
+          client_email: string
+          client_name: string
+          comment?: string | null
+          created_at?: string
+          id?: string
+          professional_id: string
+          rating: number
+          updated_at?: string
+        }
+        Update: {
+          client_email?: string
+          client_name?: string
+          comment?: string | null
+          created_at?: string
+          id?: string
+          professional_id?: string
+          rating?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reviews_professional_id_fkey"
+            columns: ["professional_id"]
+            isOneToOne: false
+            referencedRelation: "professionals"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {

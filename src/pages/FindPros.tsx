@@ -19,6 +19,7 @@ type Professional = {
   location?: string;
   description?: string;
   experience?: string;
+  hourly_rate?: string;
 };
 
 export default function FindPros() {
@@ -159,7 +160,7 @@ export default function FindPros() {
                 rating={4.8} // Mock rating for now
                 reviewCount={12} // Mock review count for now
                 serviceStyle={professional.specialty}
-                startingPrice={0}
+                startingPrice={professional.hourly_rate || "Contact for quote"}
                 portfolioImages={["/placeholder.svg"]} // Mock image for now
                 specialty={professional.specialty}
                 bio={professional.description || "Experienced professional ready to help with your project."}

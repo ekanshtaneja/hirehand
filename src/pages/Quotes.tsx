@@ -16,7 +16,7 @@ const providers = [
     rating: 4.9,
     reviewCount: 127,
     serviceStyle: "Labor-based",
-    startingPrice: 200,
+    startingPrice: "$200/hour",
     portfolioImages: ["/placeholder.svg"],
     specialty: "Interior Painting",
     bio: "Professional painter with 15+ years of experience. Specializing in high-quality interior and exterior painting with attention to detail.",
@@ -30,7 +30,7 @@ const providers = [
     rating: 4.8,
     reviewCount: 89,
     serviceStyle: "Machine-assisted",
-    startingPrice: 180,
+    startingPrice: "$180/hour",
     portfolioImages: ["/placeholder.svg"],
     specialty: "Commercial Painting",
     bio: "Full-service painting company with modern equipment and eco-friendly materials. Licensed and insured.",
@@ -44,7 +44,7 @@ const providers = [
     rating: 5.0,
     reviewCount: 203,
     serviceStyle: "Labor-based",
-    startingPrice: 350,
+    startingPrice: "$350/hour",
     portfolioImages: ["/placeholder.svg"],
     specialty: "Custom Furniture",
     bio: "Master carpenter creating beautiful custom furniture and built-ins. Every piece is crafted with precision and care.",
@@ -58,7 +58,7 @@ const providers = [
     rating: 4.7,
     reviewCount: 156,
     serviceStyle: "Machine-assisted",
-    startingPrice: 150,
+    startingPrice: "$150/hour",
     portfolioImages: ["/placeholder.svg"],
     specialty: "Smart Home Wiring",
     bio: "Modern electrical solutions for smart homes. Certified electricians with latest technology and safety standards.",
@@ -72,7 +72,7 @@ const providers = [
     rating: 4.9,
     reviewCount: 94,
     serviceStyle: "Labor-based",
-    startingPrice: 500,
+    startingPrice: "$500/hour",
     portfolioImages: ["/placeholder.svg"],
     specialty: "Residential Design",
     bio: "Award-winning interior designer transforming homes with elegant, functional designs that reflect your personality.",
@@ -86,7 +86,7 @@ const providers = [
     rating: 4.6,
     reviewCount: 78,
     serviceStyle: "Machine-assisted",
-    startingPrice: 400,
+    startingPrice: "$400/hour",
     portfolioImages: ["/placeholder.svg"],
     specialty: "Brick Restoration",
     bio: "Specializing in historic brick restoration and modern masonry work. Preserving the past while building the future.",
@@ -111,7 +111,10 @@ export default function Quotes() {
       if (filters.location && !provider.location.toLowerCase().includes(filters.location.toLowerCase())) {
         return false;
       }
-      if (provider.startingPrice > filters.maxBudget[0]) {
+      // Extract numeric value from price string for comparison
+      const priceMatch = provider.startingPrice.match(/\$(\d+)/);
+      const providerPrice = priceMatch ? parseInt(priceMatch[1]) : 0;
+      if (providerPrice > filters.maxBudget[0]) {
         return false;
       }
       if (filters.serviceStyle && provider.serviceStyle !== filters.serviceStyle) {

@@ -9,7 +9,7 @@ interface ProviderCardProps {
   rating: number;
   reviewCount: number;
   serviceStyle: string;
-  startingPrice: number;
+  startingPrice: string;
   portfolioImages: string[];
   specialty: string;
   bio: string;
