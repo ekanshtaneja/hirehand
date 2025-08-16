@@ -15,6 +15,7 @@ type Professional = {
   email: string;
   specialty: string;
   created_at: string;
+  status: string;
 };
 
 type QuoteRequest = {
@@ -38,6 +39,32 @@ export default function Admin() {
     weeklyVisitors: [0, 0, 0, 0, 0, 0, 0]
   });
   const { toast } = useToast();
+
+  // Handle approve/reject professional
+  const handleApproveReject = async (professionalId: string, status: 'approved' | 'rejected') => {
+    try {
+      const { error } = await supabase
+        .from('professionals')
+        .update({ status })
+        .eq('id', professionalId);
+
+      if (error) throw error;
+
+      toast({
+        title: status === 'approved' ? "Professional Approved" : "Professional Rejected",
+        description: `Professional has been ${status} successfully.`
+      });
+
+      fetchData(); // Refresh data
+    } catch (error) {
+      console.error('Error updating professional status:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update professional status.",
+        variant: "destructive"
+      });
+    }
+  };
 
   // Fetch real data from Supabase
   const fetchData = async () => {
@@ -245,21 +272,21 @@ export default function Admin() {
             </CardContent>
           </Card>
 
-          {/* Newly Registered Professionals */}
+          {/* Professionals Pending Approval */}
           <Card className="shadow-card border-0 animate-slide-up animate-delay-100">
             <CardHeader>
-              <CardTitle>Newly Registered Professionals</CardTitle>
+              <CardTitle>Professionals Pending Approval</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {professionals.length === 0 ? (
+                {professionals.filter(p => p.status === 'pending').length === 0 ? (
                   <div className="text-center py-8 text-muted-foreground">
-                    No professionals registered yet.
+                    No professionals pending approval.
                   </div>
                 ) : (
-                  professionals.slice(0, 5).map((professional) => (
+                  professionals.filter(p => p.status === 'pending').slice(0, 5).map((professional) => (
                     <div key={professional.id} className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
-                      <div>
+                      <div className="flex-1">
                         <h4 className="font-medium text-foreground">{professional.name}</h4>
                         <div className="flex items-center space-x-4 mt-1 text-sm text-muted-foreground">
                           <div className="flex items-center">
@@ -270,11 +297,25 @@ export default function Admin() {
                             {professional.specialty}
                           </Badge>
                         </div>
-                      </div>
-                      <div className="text-right">
-                        <div className="text-sm text-muted-foreground">
-                          {new Date(professional.created_at).toLocaleDateString()}
+                        <div className="text-sm text-muted-foreground mt-1">
+                          Registered: {new Date(professional.created_at).toLocaleDateString()}
                         </div>
+                      </div>
+                      <div className="flex space-x-2">
+                        <Button 
+                          size="sm" 
+                          onClick={() => handleApproveReject(professional.id, 'approved')}
+                          className="bg-construction-safety hover:bg-construction-safety/90"
+                        >
+                          Approve
+                        </Button>
+                        <Button 
+                          size="sm" 
+                          variant="destructive"
+                          onClick={() => handleApproveReject(professional.id, 'rejected')}
+                        >
+                          Reject
+                        </Button>
                       </div>
                     </div>
                   ))

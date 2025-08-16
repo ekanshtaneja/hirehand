@@ -7,6 +7,7 @@ import { Layout } from "./components/Layout";
 import Home from "./pages/Home";
 import GetQuote from "./pages/GetQuote";
 import Quotes from "./pages/Quotes";
+import FindPros from "./pages/FindPros";
 import Admin from "./pages/Admin";
 import RegisterProfessional from "./pages/RegisterProfessional";
 import Team from "./pages/Team";
@@ -26,6 +27,7 @@ const App = () => (
             <Route index element={<Home />} />
             <Route path="get-quote/:service" element={<GetQuote />} />
             <Route path="quotes" element={<Quotes />} />
+            <Route path="find-pros" element={<FindPros />} />
             <Route path="admin" element={<Admin />} />
             <Route path="register-professional" element={<RegisterProfessional />} />
             <Route path="team" element={<Team />} />

@@ -9,7 +9,7 @@ export const Navigation = () => {
 
   const links = [
     { href: "/", label: "Home" },
-    { href: "/quotes", label: "Find Pros" },
+    { href: "/find-pros", label: "Find Pros" },
     { href: "/register-professional", label: "Join as Pro" },
     { href: "/team", label: "Our Team" },
     { href: "/contact", label: "Contact" },
