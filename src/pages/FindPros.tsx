@@ -11,11 +11,9 @@ import { ProviderCard } from "@/components/ProviderCard";
 type Professional = {
   id: string;
   name: string;
-  email: string;
   specialty: string;
   created_at: string;
   status: string;
-  phone?: string;
   location?: string;
   description?: string;
   experience?: string;
@@ -34,9 +32,8 @@ export default function FindPros() {
     const fetchProfessionals = async () => {
       try {
         const { data, error } = await supabase
-          .from('professionals')
+          .from('professionals_public')
           .select('*')
-          .eq('status', 'approved')
           .order('created_at', { ascending: false });
 
         if (error) throw error;
@@ -164,8 +161,8 @@ export default function FindPros() {
                 portfolioImages={["/placeholder.svg"]} // Mock image for now
                 specialty={professional.specialty}
                 bio={professional.description || "Experienced professional ready to help with your project."}
-                phone={professional.phone}
-                email={professional.email}
+                phone={undefined}
+                email={undefined}
               />
             ))}
           </div>
