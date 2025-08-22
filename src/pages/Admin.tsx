@@ -43,10 +43,11 @@ export default function Admin() {
   // Handle approve/reject professional
   const handleApproveReject = async (professionalId: string, status: 'approved' | 'rejected') => {
     try {
-      const { error } = await supabase
-        .from('professionals')
-        .update({ status })
-        .eq('id', professionalId);
+      // Use admin function to update professional status
+      const { error } = await supabase.rpc('admin_update_professional_status', {
+        professional_id: professionalId,
+        new_status: status
+      });
 
       if (error) throw error;
 

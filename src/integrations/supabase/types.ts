@@ -296,6 +296,10 @@ export type Database = {
           updated_at: string
         }[]
       }
+      admin_update_professional_status: {
+        Args: { new_status: string; professional_id: string }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
