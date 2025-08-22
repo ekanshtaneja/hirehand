@@ -66,21 +66,14 @@ export default function Admin() {
     }
   };
 
-  // Fetch real data from Supabase
+  // Fetch real data from Supabase using admin functions
   const fetchData = async () => {
     try {
-      // Fetch professionals
-      const { data: profData } = await supabase
-        .from('professionals')
-        .select('*')
-        .order('created_at', { ascending: false });
+      // Fetch professionals using admin function
+      const { data: profData } = await supabase.rpc('admin_get_professionals');
 
-      // Fetch quote requests
-      const { data: quoteData } = await supabase
-        .from('quote_requests')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(10);
+      // Fetch quote requests using admin function
+      const { data: quoteData } = await supabase.rpc('admin_get_quote_requests');
 
       // Fetch analytics data
       const { data: analyticsCount } = await supabase

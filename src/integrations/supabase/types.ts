@@ -264,7 +264,38 @@ export type Database = {
       }
     }
     Functions: {
-      [_ in never]: never
+      admin_get_professionals: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          created_at: string
+          description: string
+          email: string
+          experience: string
+          hourly_rate: string
+          id: string
+          location: string
+          name: string
+          phone: string
+          specialty: string
+          status: string
+          updated_at: string
+        }[]
+      }
+      admin_get_quote_requests: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          budget: string
+          created_at: string
+          description: string
+          email: string
+          id: string
+          location: string
+          name: string
+          phone: string
+          service: string
+          updated_at: string
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never
