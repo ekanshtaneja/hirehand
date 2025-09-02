@@ -4,9 +4,8 @@ import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { ProviderCard } from "@/components/ProviderCard";
-import { Search, Filter, DollarSign, IndianRupee } from "lucide-react";
+import { Search, Filter } from "lucide-react";
 import { useCurrencyConverter } from "@/hooks/useCurrencyConverter";
 import { useToast } from "@/hooks/use-toast";
 
@@ -106,34 +105,32 @@ export default function Quotes() {
     serviceStyle: "",
   });
   
-  const [currency, setCurrency] = useState<'USD' | 'INR'>('USD');
   const [exchangeRate, setExchangeRate] = useState<number | null>(null);
   const { convert, convertPrice, loading, error } = useCurrencyConverter();
   const { toast } = useToast();
 
-  // Fetch exchange rate when switching to INR
+  // Fetch exchange rate on component mount
   useEffect(() => {
     const fetchExchangeRate = async () => {
-      if (currency === 'INR' && !exchangeRate) {
+      if (!exchangeRate) {
         const result = await convert(1, 'USD', 'INR');
         if (result) {
           setExchangeRate(result.rate);
         } else if (error) {
           toast({
             title: "Currency Conversion Error",
-            description: "Failed to fetch exchange rate. Showing USD prices.",
+            description: "Failed to fetch exchange rate. Please refresh the page.",
             variant: "destructive"
           });
-          setCurrency('USD');
         }
       }
     };
     
     fetchExchangeRate();
-  }, [currency, exchangeRate, convert, error, toast]);
+  }, [exchangeRate, convert, error, toast]);
 
   const convertedProviders = useMemo(() => {
-    if (currency === 'USD' || !exchangeRate) {
+    if (!exchangeRate) {
       return providers;
     }
     
@@ -141,7 +138,7 @@ export default function Quotes() {
       ...provider,
       startingPrice: convertPrice(provider.startingPrice, exchangeRate)
     }));
-  }, [currency, exchangeRate, convertPrice]);
+  }, [exchangeRate, convertPrice]);
 
   const filteredProviders = useMemo(() => {
     return convertedProviders.filter((provider) => {
@@ -151,10 +148,10 @@ export default function Quotes() {
       if (filters.location && !provider.location.toLowerCase().includes(filters.location.toLowerCase())) {
         return false;
       }
-      // Extract numeric value from price string for comparison
-      const priceMatch = provider.startingPrice.match(currency === 'USD' ? /\$(\d+)/ : /₹([\d,]+)/);
+      // Extract numeric value from price string for comparison (always INR)
+      const priceMatch = provider.startingPrice.match(/₹([\d,]+)/);
       const providerPrice = priceMatch ? parseInt(priceMatch[1].replace(/,/g, '')) : 0;
-      const maxBudget = currency === 'USD' ? filters.maxBudget[0] : filters.maxBudget[0] * (exchangeRate || 83);
+      const maxBudget = filters.maxBudget[0] * (exchangeRate || 83);
       if (providerPrice > maxBudget) {
         return false;
       }
@@ -163,7 +160,7 @@ export default function Quotes() {
       }
       return true;
     });
-  }, [convertedProviders, filters, currency, exchangeRate]);
+  }, [convertedProviders, filters, exchangeRate]);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-accent/20 py-12">
@@ -178,35 +175,17 @@ export default function Quotes() {
                 Browse our network of vetted professionals and find the perfect match for your project.
               </p>
             </div>
-            
-            {/* Currency Toggle */}
-            <div className="flex items-center gap-2">
-              <Button
-                variant={currency === 'USD' ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => setCurrency('USD')}
-                className="flex items-center gap-2"
-              >
-                <DollarSign className="h-4 w-4" />
-                USD
-              </Button>
-              <Button
-                variant={currency === 'INR' ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => setCurrency('INR')}
-                disabled={loading}
-                className="flex items-center gap-2"
-              >
-                <IndianRupee className="h-4 w-4" />
-                INR
-                {loading && <span className="ml-1 text-xs">(Loading...)</span>}
-              </Button>
-            </div>
           </div>
           
-          {currency === 'INR' && exchangeRate && (
+          {exchangeRate && (
             <div className="text-sm text-muted-foreground mb-4">
-              Exchange Rate: 1 USD = ₹{exchangeRate.toFixed(2)}
+              All prices shown in Indian Rupees (₹) | Exchange Rate: 1 USD = ₹{exchangeRate.toFixed(2)}
+            </div>
+          )}
+          
+          {loading && (
+            <div className="text-sm text-muted-foreground mb-4">
+              Loading exchange rates...
             </div>
           )}
         </div>
@@ -256,7 +235,7 @@ export default function Quotes() {
                 {/* Budget */}
                 <div>
                   <Label className="text-sm font-medium">
-                    Maximum Budget: {currency === 'USD' ? '$' : '₹'}{currency === 'USD' ? filters.maxBudget[0] : Math.round(filters.maxBudget[0] * (exchangeRate || 83)).toLocaleString('en-IN')}
+                    Maximum Budget: ₹{Math.round(filters.maxBudget[0] * (exchangeRate || 83)).toLocaleString('en-IN')}
                   </Label>
                   <Slider
                     value={filters.maxBudget}
@@ -267,8 +246,8 @@ export default function Quotes() {
                     className="mt-4"
                   />
                   <div className="flex justify-between text-xs text-muted-foreground mt-1">
-                    <span>{currency === 'USD' ? '$100' : '₹' + Math.round(100 * (exchangeRate || 83)).toLocaleString('en-IN')}</span>
-                    <span>{currency === 'USD' ? '$1000+' : '₹' + Math.round(1000 * (exchangeRate || 83)).toLocaleString('en-IN') + '+'}</span>
+                    <span>₹{Math.round(100 * (exchangeRate || 83)).toLocaleString('en-IN')}</span>
+                    <span>₹{Math.round(1000 * (exchangeRate || 83)).toLocaleString('en-IN')}+</span>
                   </div>
                 </div>
 
