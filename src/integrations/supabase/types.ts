@@ -80,13 +80,6 @@ export type Database = {
             referencedRelation: "professionals"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "contact_requests_professional_id_fkey"
-            columns: ["professional_id"]
-            isOneToOne: false
-            referencedRelation: "professionals_public"
-            referencedColumns: ["id"]
-          },
         ]
       }
       professionals: {
@@ -212,56 +205,11 @@ export type Database = {
             referencedRelation: "professionals"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "reviews_professional_id_fkey"
-            columns: ["professional_id"]
-            isOneToOne: false
-            referencedRelation: "professionals_public"
-            referencedColumns: ["id"]
-          },
         ]
       }
     }
     Views: {
-      professionals_public: {
-        Row: {
-          created_at: string | null
-          description: string | null
-          experience: string | null
-          hourly_rate: string | null
-          id: string | null
-          location: string | null
-          name: string | null
-          specialty: string | null
-          status: string | null
-          updated_at: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          description?: string | null
-          experience?: string | null
-          hourly_rate?: string | null
-          id?: string | null
-          location?: string | null
-          name?: string | null
-          specialty?: string | null
-          status?: string | null
-          updated_at?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          description?: string | null
-          experience?: string | null
-          hourly_rate?: string | null
-          id?: string | null
-          location?: string | null
-          name?: string | null
-          specialty?: string | null
-          status?: string | null
-          updated_at?: string | null
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Functions: {
       admin_get_professionals: {
@@ -299,6 +247,21 @@ export type Database = {
       admin_update_professional_status: {
         Args: { new_status: string; professional_id: string }
         Returns: undefined
+      }
+      list_approved_professionals: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          created_at: string
+          description: string
+          experience: string
+          hourly_rate: string
+          id: string
+          location: string
+          name: string
+          specialty: string
+          status: string
+          updated_at: string
+        }[]
       }
     }
     Enums: {

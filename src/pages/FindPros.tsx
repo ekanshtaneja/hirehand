@@ -27,14 +27,11 @@ export default function FindPros() {
   const [selectedSpecialty, setSelectedSpecialty] = useState("all");
   const [loading, setLoading] = useState(true);
 
-  // Fetch approved professionals from Supabase
+  // Fetch approved professionals from Supabase using RPC
   useEffect(() => {
     const fetchProfessionals = async () => {
       try {
-        const { data, error } = await supabase
-          .from('professionals_public')
-          .select('*')
-          .order('created_at', { ascending: false });
+        const { data, error } = await supabase.rpc('list_approved_professionals');
 
         if (error) throw error;
         
