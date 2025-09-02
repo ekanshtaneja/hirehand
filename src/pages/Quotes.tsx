@@ -1,11 +1,14 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { ProviderCard } from "@/components/ProviderCard";
-import { Search, Filter } from "lucide-react";
+import { Search, Filter, DollarSign, IndianRupee } from "lucide-react";
+import { useCurrencyConverter } from "@/hooks/useCurrencyConverter";
+import { useToast } from "@/hooks/use-toast";
 
 // Mock provider data
 const providers = [
@@ -102,9 +105,46 @@ export default function Quotes() {
     maxBudget: [1000],
     serviceStyle: "",
   });
+  
+  const [currency, setCurrency] = useState<'USD' | 'INR'>('USD');
+  const [exchangeRate, setExchangeRate] = useState<number | null>(null);
+  const { convert, convertPrice, loading, error } = useCurrencyConverter();
+  const { toast } = useToast();
+
+  // Fetch exchange rate when switching to INR
+  useEffect(() => {
+    const fetchExchangeRate = async () => {
+      if (currency === 'INR' && !exchangeRate) {
+        const result = await convert(1, 'USD', 'INR');
+        if (result) {
+          setExchangeRate(result.rate);
+        } else if (error) {
+          toast({
+            title: "Currency Conversion Error",
+            description: "Failed to fetch exchange rate. Showing USD prices.",
+            variant: "destructive"
+          });
+          setCurrency('USD');
+        }
+      }
+    };
+    
+    fetchExchangeRate();
+  }, [currency, exchangeRate, convert, error, toast]);
+
+  const convertedProviders = useMemo(() => {
+    if (currency === 'USD' || !exchangeRate) {
+      return providers;
+    }
+    
+    return providers.map(provider => ({
+      ...provider,
+      startingPrice: convertPrice(provider.startingPrice, exchangeRate)
+    }));
+  }, [currency, exchangeRate, convertPrice]);
 
   const filteredProviders = useMemo(() => {
-    return providers.filter((provider) => {
+    return convertedProviders.filter((provider) => {
       if (filters.name && !provider.name.toLowerCase().includes(filters.name.toLowerCase())) {
         return false;
       }
@@ -112,9 +152,10 @@ export default function Quotes() {
         return false;
       }
       // Extract numeric value from price string for comparison
-      const priceMatch = provider.startingPrice.match(/\$(\d+)/);
-      const providerPrice = priceMatch ? parseInt(priceMatch[1]) : 0;
-      if (providerPrice > filters.maxBudget[0]) {
+      const priceMatch = provider.startingPrice.match(currency === 'USD' ? /\$(\d+)/ : /₹([\d,]+)/);
+      const providerPrice = priceMatch ? parseInt(priceMatch[1].replace(/,/g, '')) : 0;
+      const maxBudget = currency === 'USD' ? filters.maxBudget[0] : filters.maxBudget[0] * (exchangeRate || 83);
+      if (providerPrice > maxBudget) {
         return false;
       }
       if (filters.serviceStyle && provider.serviceStyle !== filters.serviceStyle) {
@@ -122,18 +163,52 @@ export default function Quotes() {
       }
       return true;
     });
-  }, [filters]);
+  }, [convertedProviders, filters, currency, exchangeRate]);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-accent/20 py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
-            Find Construction Professionals
-          </h1>
-          <p className="text-muted-foreground">
-            Browse our network of vetted professionals and find the perfect match for your project.
-          </p>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+            <div>
+              <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
+                Find Construction Professionals
+              </h1>
+              <p className="text-muted-foreground">
+                Browse our network of vetted professionals and find the perfect match for your project.
+              </p>
+            </div>
+            
+            {/* Currency Toggle */}
+            <div className="flex items-center gap-2">
+              <Button
+                variant={currency === 'USD' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setCurrency('USD')}
+                className="flex items-center gap-2"
+              >
+                <DollarSign className="h-4 w-4" />
+                USD
+              </Button>
+              <Button
+                variant={currency === 'INR' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setCurrency('INR')}
+                disabled={loading}
+                className="flex items-center gap-2"
+              >
+                <IndianRupee className="h-4 w-4" />
+                INR
+                {loading && <span className="ml-1 text-xs">(Loading...)</span>}
+              </Button>
+            </div>
+          </div>
+          
+          {currency === 'INR' && exchangeRate && (
+            <div className="text-sm text-muted-foreground mb-4">
+              Exchange Rate: 1 USD = ₹{exchangeRate.toFixed(2)}
+            </div>
+          )}
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
@@ -181,7 +256,7 @@ export default function Quotes() {
                 {/* Budget */}
                 <div>
                   <Label className="text-sm font-medium">
-                    Maximum Budget: ${filters.maxBudget[0]}
+                    Maximum Budget: {currency === 'USD' ? '$' : '₹'}{currency === 'USD' ? filters.maxBudget[0] : Math.round(filters.maxBudget[0] * (exchangeRate || 83)).toLocaleString('en-IN')}
                   </Label>
                   <Slider
                     value={filters.maxBudget}
@@ -192,8 +267,8 @@ export default function Quotes() {
                     className="mt-4"
                   />
                   <div className="flex justify-between text-xs text-muted-foreground mt-1">
-                    <span>$100</span>
-                    <span>$1000+</span>
+                    <span>{currency === 'USD' ? '$100' : '₹' + Math.round(100 * (exchangeRate || 83)).toLocaleString('en-IN')}</span>
+                    <span>{currency === 'USD' ? '$1000+' : '₹' + Math.round(1000 * (exchangeRate || 83)).toLocaleString('en-IN') + '+'}</span>
                   </div>
                 </div>
 
