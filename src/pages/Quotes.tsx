@@ -18,7 +18,7 @@ const providers = [
     rating: 4.9,
     reviewCount: 127,
     serviceStyle: "Labor-based",
-    startingPrice: "$200/hour",
+    startingPrice: "$15/hour",
     portfolioImages: ["/placeholder.svg"],
     specialty: "Interior Painting",
     bio: "Professional painter with 15+ years of experience. Specializing in high-quality interior and exterior painting with attention to detail.",
@@ -32,7 +32,7 @@ const providers = [
     rating: 4.8,
     reviewCount: 89,
     serviceStyle: "Machine-assisted",
-    startingPrice: "$180/hour",
+    startingPrice: "$12/hour",
     portfolioImages: ["/placeholder.svg"],
     specialty: "Commercial Painting",
     bio: "Full-service painting company with modern equipment and eco-friendly materials. Licensed and insured.",
@@ -46,7 +46,7 @@ const providers = [
     rating: 5.0,
     reviewCount: 203,
     serviceStyle: "Labor-based",
-    startingPrice: "$350/hour",
+    startingPrice: "$25/hour",
     portfolioImages: ["/placeholder.svg"],
     specialty: "Custom Furniture",
     bio: "Master carpenter creating beautiful custom furniture and built-ins. Every piece is crafted with precision and care.",
@@ -60,7 +60,7 @@ const providers = [
     rating: 4.7,
     reviewCount: 156,
     serviceStyle: "Machine-assisted",
-    startingPrice: "$150/hour",
+    startingPrice: "$18/hour",
     portfolioImages: ["/placeholder.svg"],
     specialty: "Smart Home Wiring",
     bio: "Modern electrical solutions for smart homes. Certified electricians with latest technology and safety standards.",
@@ -74,7 +74,7 @@ const providers = [
     rating: 4.9,
     reviewCount: 94,
     serviceStyle: "Labor-based",
-    startingPrice: "$500/hour",
+    startingPrice: "$20/hour",
     portfolioImages: ["/placeholder.svg"],
     specialty: "Residential Design",
     bio: "Award-winning interior designer transforming homes with elegant, functional designs that reflect your personality.",
@@ -88,7 +88,7 @@ const providers = [
     rating: 4.6,
     reviewCount: 78,
     serviceStyle: "Machine-assisted",
-    startingPrice: "$400/hour",
+    startingPrice: "$22/hour",
     portfolioImages: ["/placeholder.svg"],
     specialty: "Brick Restoration",
     bio: "Specializing in historic brick restoration and modern masonry work. Preserving the past while building the future.",
@@ -101,7 +101,7 @@ export default function Quotes() {
   const [filters, setFilters] = useState({
     name: "",
     location: "",
-    maxBudget: [1000],
+    maxBudget: [100],
     serviceStyle: "",
   });
   
@@ -151,7 +151,7 @@ export default function Quotes() {
       // Extract numeric value from price string for comparison (always INR)
       const priceMatch = provider.startingPrice.match(/₹([\d,]+)/);
       const providerPrice = priceMatch ? parseInt(priceMatch[1].replace(/,/g, '')) : 0;
-      const maxBudget = filters.maxBudget[0] * (exchangeRate || 83);
+      const maxBudget = filters.maxBudget[0] * (exchangeRate || 88) / 10;
       if (providerPrice > maxBudget) {
         return false;
       }
@@ -235,19 +235,19 @@ export default function Quotes() {
                 {/* Budget */}
                 <div>
                   <Label className="text-sm font-medium">
-                    Maximum Budget: ₹{Math.round(filters.maxBudget[0] * (exchangeRate || 83)).toLocaleString('en-IN')}
+                    Maximum Budget: ₹{Math.round(filters.maxBudget[0] * (exchangeRate || 88) / 10).toLocaleString('en-IN')}
                   </Label>
                   <Slider
                     value={filters.maxBudget}
                     onValueChange={(value) => setFilters({...filters, maxBudget: value})}
-                    max={1000}
-                    min={100}
-                    step={50}
+                    max={100}
+                    min={10}
+                    step={5}
                     className="mt-4"
                   />
                   <div className="flex justify-between text-xs text-muted-foreground mt-1">
-                    <span>₹{Math.round(100 * (exchangeRate || 83)).toLocaleString('en-IN')}</span>
-                    <span>₹{Math.round(1000 * (exchangeRate || 83)).toLocaleString('en-IN')}+</span>
+                    <span>₹{Math.round(10 * (exchangeRate || 88) / 10).toLocaleString('en-IN')}</span>
+                    <span>₹{Math.round(100 * (exchangeRate || 88) / 10).toLocaleString('en-IN')}+</span>
                   </div>
                 </div>
 
