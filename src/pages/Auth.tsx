@@ -129,6 +129,50 @@ const Auth = () => {
     }
   };
 
+  const createAdminUser = async () => {
+    setLoading(true);
+    try {
+      const redirectUrl = `${window.location.origin}/`;
+      
+      const { error } = await supabase.auth.signUp({
+        email: 'admin@admin.com',
+        password: 'admin123',
+        options: {
+          emailRedirectTo: redirectUrl
+        }
+      });
+
+      if (error) {
+        if (error.message === 'User already registered') {
+          toast({
+            title: "Admin Already Exists",
+            description: "Admin user already created. Use admin@admin.com / admin123 to sign in.",
+            variant: "destructive",
+          });
+        } else {
+          toast({
+            title: "Admin Creation Error",
+            description: error.message,
+            variant: "destructive",
+          });
+        }
+      } else {
+        toast({
+          title: "Admin User Created!",
+          description: "Admin created: admin@admin.com / admin123. Check email to verify.",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Admin Creation Error",
+        description: "Failed to create admin user.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent, action: 'signin' | 'signup') => {
     e.preventDefault();
     if (action === 'signin') {
@@ -235,6 +279,25 @@ const Auth = () => {
                 </form>
               </TabsContent>
             </Tabs>
+            
+            {/* Development Admin Creation */}
+            <div className="mt-6 pt-6 border-t border-muted">
+              <div className="text-center">
+                <p className="text-sm text-muted-foreground mb-3">
+                  Development Quick Access
+                </p>
+                <Button 
+                  onClick={createAdminUser}
+                  variant="outline"
+                  size="sm"
+                  disabled={loading}
+                  className="w-full"
+                >
+                  {loading && <Loader2 className="mr-2 h-3 w-3 animate-spin" />}
+                  Create Admin User (admin@admin.com / admin123)
+                </Button>
+              </div>
+            </div>
           </CardContent>
         </Card>
       </div>
