@@ -136,7 +136,7 @@ const Auth = () => {
       
       const { error } = await supabase.auth.signUp({
         email: 'admin@admin.com',
-        password: 'admin123',
+        password: '1234',
         options: {
           emailRedirectTo: redirectUrl
         }
@@ -146,7 +146,7 @@ const Auth = () => {
         if (error.message === 'User already registered') {
           toast({
             title: "Admin Already Exists",
-            description: "Admin user already created. Use admin@admin.com / admin123 to sign in.",
+            description: "Admin user already created. Use admin@admin.com / 1234 to sign in.",
             variant: "destructive",
           });
         } else {
@@ -159,7 +159,7 @@ const Auth = () => {
       } else {
         toast({
           title: "Admin User Created!",
-          description: "Admin created: admin@admin.com / admin123. Check email to verify.",
+          description: "Admin created: admin@admin.com / 1234. Check email to verify.",
         });
       }
     } catch (error) {
@@ -294,7 +294,7 @@ const Auth = () => {
                   className="w-full"
                 >
                   {loading && <Loader2 className="mr-2 h-3 w-3 animate-spin" />}
-                  Create Admin User (admin@admin.com / admin123)
+                  Create Admin User (admin@admin.com / 1234)
                 </Button>
               </div>
             </div>
