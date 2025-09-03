@@ -12,6 +12,7 @@ import Admin from "./pages/Admin";
 import RegisterProfessional from "./pages/RegisterProfessional";
 import Team from "./pages/Team";
 import Contact from "./pages/Contact";
+import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -32,6 +33,7 @@ const App = () => (
             <Route path="register-professional" element={<RegisterProfessional />} />
             <Route path="team" element={<Team />} />
             <Route path="contact" element={<Contact />} />
+            <Route path="auth" element={<Auth />} />
           </Route>
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
