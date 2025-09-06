@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
@@ -6,8 +6,6 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ProviderCard } from "@/components/ProviderCard";
 import { Search, Filter } from "lucide-react";
-import { useCurrencyConverter } from "@/hooks/useCurrencyConverter";
-import { useToast } from "@/hooks/use-toast";
 
 // Mock provider data
 const providers = [
@@ -18,7 +16,7 @@ const providers = [
     rating: 4.9,
     reviewCount: 127,
     serviceStyle: "Labor-based",
-    startingPrice: "$15/hour",
+    startingPrice: 200,
     portfolioImages: ["/placeholder.svg"],
     specialty: "Interior Painting",
     bio: "Professional painter with 15+ years of experience. Specializing in high-quality interior and exterior painting with attention to detail.",
@@ -32,7 +30,7 @@ const providers = [
     rating: 4.8,
     reviewCount: 89,
     serviceStyle: "Machine-assisted",
-    startingPrice: "$12/hour",
+    startingPrice: 180,
     portfolioImages: ["/placeholder.svg"],
     specialty: "Commercial Painting",
     bio: "Full-service painting company with modern equipment and eco-friendly materials. Licensed and insured.",
@@ -46,7 +44,7 @@ const providers = [
     rating: 5.0,
     reviewCount: 203,
     serviceStyle: "Labor-based",
-    startingPrice: "$25/hour",
+    startingPrice: 350,
     portfolioImages: ["/placeholder.svg"],
     specialty: "Custom Furniture",
     bio: "Master carpenter creating beautiful custom furniture and built-ins. Every piece is crafted with precision and care.",
@@ -60,7 +58,7 @@ const providers = [
     rating: 4.7,
     reviewCount: 156,
     serviceStyle: "Machine-assisted",
-    startingPrice: "$18/hour",
+    startingPrice: 150,
     portfolioImages: ["/placeholder.svg"],
     specialty: "Smart Home Wiring",
     bio: "Modern electrical solutions for smart homes. Certified electricians with latest technology and safety standards.",
@@ -74,7 +72,7 @@ const providers = [
     rating: 4.9,
     reviewCount: 94,
     serviceStyle: "Labor-based",
-    startingPrice: "$20/hour",
+    startingPrice: 500,
     portfolioImages: ["/placeholder.svg"],
     specialty: "Residential Design",
     bio: "Award-winning interior designer transforming homes with elegant, functional designs that reflect your personality.",
@@ -88,7 +86,7 @@ const providers = [
     rating: 4.6,
     reviewCount: 78,
     serviceStyle: "Machine-assisted",
-    startingPrice: "$22/hour",
+    startingPrice: 400,
     portfolioImages: ["/placeholder.svg"],
     specialty: "Brick Restoration",
     bio: "Specializing in historic brick restoration and modern masonry work. Preserving the past while building the future.",
@@ -101,58 +99,19 @@ export default function Quotes() {
   const [filters, setFilters] = useState({
     name: "",
     location: "",
-    maxBudget: [100],
+    maxBudget: [1000],
     serviceStyle: "",
   });
-  
-  const [exchangeRate, setExchangeRate] = useState<number | null>(null);
-  const { convert, convertPrice, loading, error } = useCurrencyConverter();
-  const { toast } = useToast();
-
-  // Fetch exchange rate on component mount
-  useEffect(() => {
-    const fetchExchangeRate = async () => {
-      if (!exchangeRate) {
-        const result = await convert(1, 'USD', 'INR');
-        if (result) {
-          setExchangeRate(result.rate);
-        } else if (error) {
-          toast({
-            title: "Currency Conversion Error",
-            description: "Failed to fetch exchange rate. Please refresh the page.",
-            variant: "destructive"
-          });
-        }
-      }
-    };
-    
-    fetchExchangeRate();
-  }, [exchangeRate, convert, error, toast]);
-
-  const convertedProviders = useMemo(() => {
-    if (!exchangeRate) {
-      return providers;
-    }
-    
-    return providers.map(provider => ({
-      ...provider,
-      startingPrice: convertPrice(provider.startingPrice, exchangeRate)
-    }));
-  }, [exchangeRate, convertPrice]);
 
   const filteredProviders = useMemo(() => {
-    return convertedProviders.filter((provider) => {
+    return providers.filter((provider) => {
       if (filters.name && !provider.name.toLowerCase().includes(filters.name.toLowerCase())) {
         return false;
       }
       if (filters.location && !provider.location.toLowerCase().includes(filters.location.toLowerCase())) {
         return false;
       }
-      // Extract numeric value from price string for comparison (always INR)
-      const priceMatch = provider.startingPrice.match(/₹([\d,]+)/);
-      const providerPrice = priceMatch ? parseInt(priceMatch[1].replace(/,/g, '')) : 0;
-      const maxBudget = filters.maxBudget[0] * (exchangeRate || 88) / 10;
-      if (providerPrice > maxBudget) {
+      if (provider.startingPrice > filters.maxBudget[0]) {
         return false;
       }
       if (filters.serviceStyle && provider.serviceStyle !== filters.serviceStyle) {
@@ -160,34 +119,18 @@ export default function Quotes() {
       }
       return true;
     });
-  }, [convertedProviders, filters, exchangeRate]);
+  }, [filters]);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-accent/20 py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
-            <div>
-              <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
-                Find Construction Professionals
-              </h1>
-              <p className="text-muted-foreground">
-                Browse our network of vetted professionals and find the perfect match for your project.
-              </p>
-            </div>
-          </div>
-          
-          {exchangeRate && (
-            <div className="text-sm text-muted-foreground mb-4">
-              All prices shown in Indian Rupees (₹) | Exchange Rate: 1 USD = ₹{exchangeRate.toFixed(2)}
-            </div>
-          )}
-          
-          {loading && (
-            <div className="text-sm text-muted-foreground mb-4">
-              Loading exchange rates...
-            </div>
-          )}
+          <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
+            Find Construction Professionals
+          </h1>
+          <p className="text-muted-foreground">
+            Browse our network of vetted professionals and find the perfect match for your project.
+          </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
@@ -235,19 +178,19 @@ export default function Quotes() {
                 {/* Budget */}
                 <div>
                   <Label className="text-sm font-medium">
-                    Maximum Budget: ₹{Math.round(filters.maxBudget[0] * (exchangeRate || 88) / 10).toLocaleString('en-IN')}
+                    Maximum Budget: ${filters.maxBudget[0]}
                   </Label>
                   <Slider
                     value={filters.maxBudget}
                     onValueChange={(value) => setFilters({...filters, maxBudget: value})}
-                    max={100}
-                    min={10}
-                    step={5}
+                    max={1000}
+                    min={100}
+                    step={50}
                     className="mt-4"
                   />
                   <div className="flex justify-between text-xs text-muted-foreground mt-1">
-                    <span>₹{Math.round(10 * (exchangeRate || 88) / 10).toLocaleString('en-IN')}</span>
-                    <span>₹{Math.round(100 * (exchangeRate || 88) / 10).toLocaleString('en-IN')}+</span>
+                    <span>$100</span>
+                    <span>$1000+</span>
                   </div>
                 </div>
 

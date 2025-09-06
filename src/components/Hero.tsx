@@ -52,7 +52,7 @@ export const Hero = () => {
                 <Users className="h-8 w-8 text-primary-glow" />
               </div>
               <div className="text-3xl font-bold mb-1">500+</div>
-              <div className="text-white/80">Professionals Available</div>
+              <div className="text-white/80">Trusted Professionals</div>
             </div>
             
             <div className="glass-effect rounded-xl p-6 shadow-elevated">

@@ -14,9 +14,7 @@ import {
   UserPlus,
   Mail,
   Phone,
-  Briefcase,
-  MapPin,
-  DollarSign
+  Briefcase
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -64,10 +62,7 @@ export default function RegisterProfessional() {
     email: "",
     phone: "",
     specialty: "",
-    experience: "",
-    location: "",
-    description: "",
-    hourlyRate: ""
+    bio: "",
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
   const { toast } = useToast();
@@ -76,7 +71,7 @@ export default function RegisterProfessional() {
     e.preventDefault();
     
     // Validate form
-    if (!formData.name || !formData.email || !formData.phone || !formData.specialty || !formData.description) {
+    if (!formData.name || !formData.email || !formData.phone || !formData.specialty || !formData.bio) {
       toast({
         title: "Incomplete Form",
         description: "Please fill in all required fields.",
@@ -94,10 +89,7 @@ export default function RegisterProfessional() {
           email: formData.email,
           phone: formData.phone,
           specialty: formData.specialty,
-          experience: formData.experience,
-          location: formData.location,
-          description: formData.description,
-          hourly_rate: formData.hourlyRate
+          description: formData.bio,
         });
 
       if (error) throw error;
@@ -284,78 +276,21 @@ export default function RegisterProfessional() {
                   </Select>
                 </div>
 
-                {/* Experience */}
-                <div>
-                  <Label htmlFor="experience" className="text-base font-medium">
-                    Years of Experience *
-                  </Label>
-                  <Select value={formData.experience} onValueChange={(value) => setFormData({...formData, experience: value})}>
-                    <SelectTrigger className="mt-2">
-                      <SelectValue placeholder="Select your experience level" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="1-2 years">1-2 years</SelectItem>
-                      <SelectItem value="3-5 years">3-5 years</SelectItem>
-                      <SelectItem value="6-10 years">6-10 years</SelectItem>
-                      <SelectItem value="10+ years">10+ years</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                {/* Location */}
-                <div>
-                  <Label htmlFor="location" className="text-base font-medium">
-                    Service Location *
-                  </Label>
-                  <div className="relative mt-2">
-                    <Input
-                      id="location"
-                      value={formData.location}
-                      onChange={(e) => setFormData({...formData, location: e.target.value})}
-                      placeholder="e.g., New York, NY or Greater Los Angeles Area"
-                      className="pl-10"
-                      required
-                    />
-                    <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  </div>
-                </div>
-
-                {/* Hourly Rate */}
-                <div>
-                  <Label htmlFor="hourlyRate" className="text-base font-medium">
-                    Hourly Rate *
-                  </Label>
-                  <div className="relative mt-2">
-                    <Input
-                      id="hourlyRate"
-                      value={formData.hourlyRate}
-                      onChange={(e) => setFormData({...formData, hourlyRate: e.target.value})}
-                      placeholder="e.g., $50/hour or $40-60/hour"
-                      className="pl-10"
-                      required
-                    />
-                    <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  </div>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    Include your typical hourly rate or range. This helps customers understand your pricing.
-                  </p>
-                </div>
-
                 {/* Bio */}
                 <div>
-                  <Label htmlFor="description" className="text-base font-medium">
+                  <Label htmlFor="bio" className="text-base font-medium">
                     Professional Bio *
                   </Label>
                   <Textarea
-                    id="description"
-                    value={formData.description}
-                    onChange={(e) => setFormData({...formData, description: e.target.value})}
+                    id="bio"
+                    value={formData.bio}
+                    onChange={(e) => setFormData({...formData, bio: e.target.value})}
                     placeholder="Tell customers about your experience, specialties, and what makes you unique. Include years of experience, certifications, and notable projects."
                     className="mt-2 min-h-[120px]"
                     required
                   />
                   <p className="text-sm text-muted-foreground mt-1">
-                    This will be displayed on your public profile. {formData.description.length}/500 characters.
+                    This will be displayed on your public profile. {formData.bio.length}/500 characters.
                   </p>
                 </div>
 

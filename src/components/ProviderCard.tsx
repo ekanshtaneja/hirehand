@@ -9,7 +9,7 @@ interface ProviderCardProps {
   rating: number;
   reviewCount: number;
   serviceStyle: string;
-  startingPrice: string;
+  startingPrice: number;
   portfolioImages: string[];
   specialty: string;
   bio: string;
@@ -87,11 +87,20 @@ export const ProviderCard = ({
           {bio}
         </p>
 
-        {/* Contact Info - Hidden for security */}
-        <div className="mb-4">
-          <p className="text-muted-foreground text-sm">
-            Contact information available after inquiry
-          </p>
+        {/* Contact Info */}
+        <div className="flex flex-col space-y-2 mb-4">
+          {phone && (
+            <div className="flex items-center text-sm text-muted-foreground">
+              <Phone className="h-4 w-4 mr-2" />
+              {phone}
+            </div>
+          )}
+          {email && (
+            <div className="flex items-center text-sm text-muted-foreground">
+              <Mail className="h-4 w-4 mr-2" />
+              {email}
+            </div>
+          )}
         </div>
 
         {/* Actions */}

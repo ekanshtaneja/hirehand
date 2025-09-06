@@ -1,67 +1,15 @@
-import { useState, useEffect } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, HardHat, LogOut, User, Shield } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
-import { User as SupabaseUser, Session } from '@supabase/supabase-js';
-import { useToast } from "@/hooks/use-toast";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { Menu, X, HardHat } from "lucide-react";
 
 export const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [user, setUser] = useState<SupabaseUser | null>(null);
-  const [session, setSession] = useState<Session | null>(null);
   const location = useLocation();
-  const navigate = useNavigate();
-  const { toast } = useToast();
-
-  useEffect(() => {
-    // Set up auth state listener
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        setSession(session);
-        setUser(session?.user ?? null);
-      }
-    );
-
-    // Check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
-
-  const signOut = async () => {
-    try {
-      const { error } = await supabase.auth.signOut();
-      if (error) throw error;
-      
-      toast({
-        title: "Signed out successfully",
-        description: "You have been logged out of your account.",
-      });
-      
-      navigate('/');
-    } catch (error) {
-      toast({
-        title: "Error signing out",
-        description: "There was an error signing you out. Please try again.",
-        variant: "destructive",
-      });
-    }
-  };
 
   const links = [
     { href: "/", label: "Home" },
-    { href: "/find-pros", label: "Find Pros" },
+    { href: "/quotes", label: "Find Pros" },
     { href: "/register-professional", label: "Join as Pro" },
     { href: "/team", label: "Our Team" },
     { href: "/contact", label: "Contact" },
@@ -98,39 +46,9 @@ export const Navigation = () => {
                 {link.label}
               </Link>
             ))}
-            
-            {/* Authentication Section */}
-            {user ? (
-              <div className="flex items-center space-x-4">
-                <Button variant="outline" size="sm" asChild>
-                  <Link to="/admin" className="flex items-center">
-                    <Shield className="h-4 w-4 mr-2" />
-                    Admin
-                  </Link>
-                </Button>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="sm" className="flex items-center">
-                      <User className="h-4 w-4 mr-2" />
-                      {user.email?.split('@')[0]}
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem onClick={signOut}>
-                      <LogOut className="h-4 w-4 mr-2" />
-                      Sign Out
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
-            ) : (
-              <Button size="sm" variant="outline" asChild>
-                <Link to="/auth" className="flex items-center">
-                  <Shield className="h-4 w-4 mr-2" />
-                  Admin
-                </Link>
-              </Button>
-            )}
+            <Button variant="outline" size="sm" asChild>
+              <Link to="/admin">Admin</Link>
+            </Button>
           </div>
 
           {/* Mobile menu button */}
@@ -163,39 +81,9 @@ export const Navigation = () => {
                   {link.label}
                 </Link>
               ))}
-              
-              {/* Mobile Authentication Section */}
-              {user ? (
-                <div className="px-3 pt-2 space-y-2 border-t border-border mt-4">
-                  <Button variant="outline" size="sm" className="w-full" asChild>
-                    <Link to="/admin" className="flex items-center justify-center">
-                      <Shield className="h-4 w-4 mr-2" />
-                      Admin Dashboard
-                    </Link>
-                  </Button>
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    className="w-full flex items-center justify-center"
-                    onClick={() => {
-                      setIsOpen(false);
-                      signOut();
-                    }}
-                  >
-                    <LogOut className="h-4 w-4 mr-2" />
-                    Sign Out ({user.email?.split('@')[0]})
-                  </Button>
-                </div>
-              ) : (
-                <div className="px-3 pt-2 border-t border-border mt-4">
-                  <Button size="sm" variant="outline" className="w-full" asChild>
-                    <Link to="/auth" onClick={() => setIsOpen(false)} className="flex items-center justify-center">
-                      <Shield className="h-4 w-4 mr-2" />
-                      Admin
-                    </Link>
-                  </Button>
-                </div>
-              )}
+              <Button variant="outline" size="sm" className="mx-3 mt-2" asChild>
+                <Link to="/admin">Admin Dashboard</Link>
+              </Button>
             </div>
           </div>
         )}
