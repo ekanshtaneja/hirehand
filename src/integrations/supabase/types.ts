@@ -212,6 +212,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      admin_delete_professional: {
+        Args: { professional_id: string }
+        Returns: undefined
+      }
       admin_get_professionals: {
         Args: Record<PropertyKey, never>
         Returns: {
