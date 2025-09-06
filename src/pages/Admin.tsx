@@ -25,7 +25,8 @@ import {
   DollarSign,
   Activity,
   Database,
-  Settings
+  Settings,
+  Trash2
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -199,6 +200,36 @@ export default function Admin() {
       toast({
         title: "Error",
         description: "Failed to update professional status.",
+        variant: "destructive"
+      });
+    }
+  };
+
+  // Handle delete professional
+  const handleDeleteProfessional = async (professionalId: string, professionalName: string) => {
+    if (!confirm(`Are you sure you want to permanently delete ${professionalName}? This action cannot be undone.`)) {
+      return;
+    }
+
+    try {
+      const { error } = await supabase.rpc('admin_delete_professional', {
+        professional_id: professionalId
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Professional Deleted",
+        description: `${professionalName} has been permanently removed.`,
+        variant: "destructive"
+      });
+
+      fetchAllData();
+    } catch (error) {
+      console.error('Error deleting professional:', error);
+      toast({
+        title: "Error",
+        description: "Failed to delete professional.",
         variant: "destructive"
       });
     }
@@ -435,16 +466,26 @@ export default function Admin() {
                         <Badge variant={prof.status === 'approved' ? 'default' : prof.status === 'pending' ? 'secondary' : 'destructive'}>
                           {prof.status}
                         </Badge>
-                        {prof.status === 'pending' && (
-                          <div className="flex space-x-2">
-                            <Button size="sm" onClick={() => handleApproveReject(prof.id, 'approved')}>
-                              Approve
-                            </Button>
-                            <Button size="sm" variant="destructive" onClick={() => handleApproveReject(prof.id, 'rejected')}>
-                              Reject
-                            </Button>
-                          </div>
-                        )}
+                        <div className="flex space-x-2">
+                          {prof.status === 'pending' && (
+                            <>
+                              <Button size="sm" onClick={() => handleApproveReject(prof.id, 'approved')}>
+                                Approve
+                              </Button>
+                              <Button size="sm" variant="destructive" onClick={() => handleApproveReject(prof.id, 'rejected')}>
+                                Reject
+                              </Button>
+                            </>
+                          )}
+                          <Button 
+                            size="sm" 
+                            variant="outline" 
+                            onClick={() => handleDeleteProfessional(prof.id, prof.name)}
+                            className="text-destructive hover:text-destructive"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   ))}
