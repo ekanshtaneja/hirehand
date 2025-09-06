@@ -39,67 +39,93 @@ export default function Admin() {
   });
   const { toast } = useToast();
 
-  // Fetch real data from Supabase
-  const fetchData = async () => {
-    try {
-      // Fetch professionals
-      const { data: profData } = await supabase
-        .from('professionals')
-        .select('*')
-        .order('created_at', { ascending: false });
+  // Static demo data for published platform
+  const loadStaticData = () => {
+    // Mock professionals data
+    const mockProfessionals: Professional[] = [
+      {
+        id: '1',
+        name: 'John Martinez',
+        email: 'john.martinez@email.com',
+        specialty: 'Electrical',
+        created_at: '2025-01-02T10:30:00Z'
+      },
+      {
+        id: '2',
+        name: 'Sarah Johnson',
+        email: 'sarah.johnson@email.com',
+        specialty: 'Plumbing',
+        created_at: '2025-01-01T14:20:00Z'
+      },
+      {
+        id: '3',
+        name: 'Mike Rodriguez',
+        email: 'mike.rodriguez@email.com',
+        specialty: 'Carpentry',
+        created_at: '2024-12-28T09:15:00Z'
+      },
+      {
+        id: '4',
+        name: 'Lisa Chen',
+        email: 'lisa.chen@email.com',
+        specialty: 'Interior Design',
+        created_at: '2024-12-25T16:45:00Z'
+      },
+      {
+        id: '5',
+        name: 'David Wilson',
+        email: 'david.wilson@email.com',
+        specialty: 'Masonry',
+        created_at: '2024-12-20T11:30:00Z'
+      }
+    ];
 
-      // Fetch quote requests
-      const { data: quoteData } = await supabase
-        .from('quote_requests')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(10);
+    // Mock quote requests
+    const mockQuoteRequests: QuoteRequest[] = [
+      {
+        id: '1',
+        name: 'Emily Davis',
+        email: 'emily.davis@email.com',
+        service: 'Kitchen Renovation',
+        location: 'Downtown Area',
+        budget: '$5,000 - $10,000',
+        created_at: '2025-01-03T08:20:00Z'
+      },
+      {
+        id: '2',
+        name: 'Robert Brown',
+        email: 'robert.brown@email.com',
+        service: 'Bathroom Repair',
+        location: 'Suburban District',
+        budget: '$1,000 - $3,000',
+        created_at: '2025-01-02T15:45:00Z'
+      },
+      {
+        id: '3',
+        name: 'Anna Thompson',
+        email: 'anna.thompson@email.com',
+        service: 'Electrical Installation',
+        location: 'City Center',
+        budget: '$2,000 - $5,000',
+        created_at: '2025-01-01T12:30:00Z'
+      }
+    ];
 
-      // Fetch analytics data
-      const { data: analyticsCount } = await supabase
-        .from('analytics')
-        .select('id', { count: 'exact' });
-
-      if (profData) setProfessionals(profData);
-      if (quoteData) setQuoteRequests(quoteData);
-      
-      // Update analytics with real data
-      setAnalyticsData({
-        totalVisitors: analyticsCount?.length || 0,
-        professionals: profData?.length || 0,
-        newProfessionals: profData?.filter(p => 
-          new Date(p.created_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
-        ).length || 0,
-        weeklyVisitors: [12, 8, 15, 20, 18, 25, 30] // Mock weekly data for now
-      });
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
+    setProfessionals(mockProfessionals);
+    setQuoteRequests(mockQuoteRequests);
+    
+    // Static analytics data for established platform
+    setAnalyticsData({
+      totalVisitors: 15847,
+      professionals: 142,
+      newProfessionals: 8,
+      weeklyVisitors: [245, 198, 312, 287, 356, 423, 398]
+    });
   };
 
   useEffect(() => {
     if (isAuthenticated) {
-      fetchData();
-      
-      // Set up real-time updates
-      const professionalChannel = supabase
-        .channel('professionals_changes')
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'professionals' }, () => {
-          fetchData();
-        })
-        .subscribe();
-
-      const quotesChannel = supabase
-        .channel('quotes_changes')
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'quote_requests' }, () => {
-          fetchData();
-        })
-        .subscribe();
-
-      return () => {
-        supabase.removeChannel(professionalChannel);
-        supabase.removeChannel(quotesChannel);
-      };
+      loadStaticData();
     }
   }, [isAuthenticated]);
   const handleLogin = (e: React.FormEvent) => {
