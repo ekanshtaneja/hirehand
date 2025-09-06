@@ -124,8 +124,11 @@ export const Navigation = () => {
                 </DropdownMenu>
               </div>
             ) : (
-              <Button size="sm" asChild>
-                <Link to="/auth">Sign In</Link>
+              <Button size="sm" variant="outline" asChild>
+                <Link to="/auth" className="flex items-center">
+                  <Shield className="h-4 w-4 mr-2" />
+                  Admin
+                </Link>
               </Button>
             )}
           </div>
@@ -185,9 +188,10 @@ export const Navigation = () => {
                 </div>
               ) : (
                 <div className="px-3 pt-2 border-t border-border mt-4">
-                  <Button size="sm" className="w-full" asChild>
-                    <Link to="/auth" onClick={() => setIsOpen(false)}>
-                      Sign In
+                  <Button size="sm" variant="outline" className="w-full" asChild>
+                    <Link to="/auth" onClick={() => setIsOpen(false)} className="flex items-center justify-center">
+                      <Shield className="h-4 w-4 mr-2" />
+                      Admin
                     </Link>
                   </Button>
                 </div>
