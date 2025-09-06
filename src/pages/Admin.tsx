@@ -39,7 +39,7 @@ export default function Admin() {
   });
   const { toast } = useToast();
 
-  // Static demo data for published platform
+  // Load static demo data for published platform
   const loadStaticData = () => {
     // Mock professionals data
     const mockProfessionals: Professional[] = [
