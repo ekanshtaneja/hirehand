@@ -207,9 +207,11 @@ export default function Admin() {
 
   // Handle delete professional
   const handleDeleteProfessional = async (professionalId: string, professionalName: string) => {
-    if (!confirm(`Are you sure you want to permanently delete ${professionalName}? This action cannot be undone.`)) {
-      return;
-    }
+    const confirmDelete = window.confirm(
+      `Are you sure you want to permanently delete ${professionalName}? This action cannot be undone.`
+    );
+    
+    if (!confirmDelete) return;
 
     try {
       const { error } = await supabase.rpc('admin_delete_professional', {
@@ -220,8 +222,7 @@ export default function Admin() {
 
       toast({
         title: "Professional Deleted",
-        description: `${professionalName} has been permanently removed.`,
-        variant: "destructive"
+        description: `${professionalName} has been permanently removed.`
       });
 
       fetchAllData();
@@ -234,6 +235,7 @@ export default function Admin() {
       });
     }
   };
+
 
   const signOut = async () => {
     try {
@@ -481,7 +483,7 @@ export default function Admin() {
                             size="sm" 
                             variant="outline" 
                             onClick={() => handleDeleteProfessional(prof.id, prof.name)}
-                            className="text-destructive hover:text-destructive"
+                            className="text-destructive hover:text-destructive border-destructive/20 hover:bg-destructive/10"
                           >
                             <Trash2 className="h-4 w-4" />
                           </Button>
