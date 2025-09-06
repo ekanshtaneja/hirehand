@@ -4,7 +4,9 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { Users, UserPlus, Eye, BarChart3, TrendingUp, Clock, Mail, Phone, Shield } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { Users, UserPlus, Eye, BarChart3, TrendingUp, Clock, Mail, Phone, Shield, Trash2, User, MapPin, DollarSign, Calendar, FileText } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 const ADMIN_PASSWORD = "admin123"; // In real app, this would be properly secured
@@ -13,8 +15,15 @@ type Professional = {
   id: string;
   name: string;
   email: string;
+  phone?: string;
   specialty: string;
+  location?: string;
+  description?: string;
+  experience?: string;
+  hourly_rate?: string;
+  status: string;
   created_at: string;
+  updated_at: string;
 };
 
 type QuoteRequest = {
@@ -39,93 +48,113 @@ export default function Admin() {
   });
   const { toast } = useToast();
 
-  // Load static demo data for published platform
-  const loadStaticData = () => {
-    // Mock professionals data
-    const mockProfessionals: Professional[] = [
-      {
-        id: '1',
-        name: 'John Martinez',
-        email: 'john.martinez@email.com',
-        specialty: 'Electrical',
-        created_at: '2025-01-02T10:30:00Z'
-      },
-      {
-        id: '2',
-        name: 'Sarah Johnson',
-        email: 'sarah.johnson@email.com',
-        specialty: 'Plumbing',
-        created_at: '2025-01-01T14:20:00Z'
-      },
-      {
-        id: '3',
-        name: 'Mike Rodriguez',
-        email: 'mike.rodriguez@email.com',
-        specialty: 'Carpentry',
-        created_at: '2024-12-28T09:15:00Z'
-      },
-      {
-        id: '4',
-        name: 'Lisa Chen',
-        email: 'lisa.chen@email.com',
-        specialty: 'Interior Design',
-        created_at: '2024-12-25T16:45:00Z'
-      },
-      {
-        id: '5',
-        name: 'David Wilson',
-        email: 'david.wilson@email.com',
-        specialty: 'Masonry',
-        created_at: '2024-12-20T11:30:00Z'
-      }
-    ];
+  // Load real data from Supabase
+  const loadData = async () => {
+    try {
+      // Fetch professionals
+      const { data: profData, error: profError } = await supabase
+        .from('professionals')
+        .select('*')
+        .order('created_at', { ascending: false });
+      
+      // Fetch quote requests  
+      const { data: quoteData, error: quoteError } = await supabase
+        .from('quote_requests')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(10);
 
-    // Mock quote requests
-    const mockQuoteRequests: QuoteRequest[] = [
-      {
-        id: '1',
-        name: 'Emily Davis',
-        email: 'emily.davis@email.com',
-        service: 'Kitchen Renovation',
-        location: 'Downtown Area',
-        budget: '$5,000 - $10,000',
-        created_at: '2025-01-03T08:20:00Z'
-      },
-      {
-        id: '2',
-        name: 'Robert Brown',
-        email: 'robert.brown@email.com',
-        service: 'Bathroom Repair',
-        location: 'Suburban District',
-        budget: '$1,000 - $3,000',
-        created_at: '2025-01-02T15:45:00Z'
-      },
-      {
-        id: '3',
-        name: 'Anna Thompson',
-        email: 'anna.thompson@email.com',
-        service: 'Electrical Installation',
-        location: 'City Center',
-        budget: '$2,000 - $5,000',
-        created_at: '2025-01-01T12:30:00Z'
+      if (profError) {
+        console.error('Error fetching professionals:', profError);
+        toast({
+          title: "Error",
+          description: "Failed to load professionals data",
+          variant: "destructive"
+        });
+      } else if (profData) {
+        // Map the data to match our Professional type
+        const mappedProfessionals: Professional[] = profData.map((p: any) => ({
+          id: p.id,
+          name: p.name,
+          email: p.email,
+          phone: p.phone,
+          specialty: p.specialty,
+          location: p.location,
+          description: p.description,
+          experience: p.experience,
+          hourly_rate: p.hourly_rate,
+          status: p.status || 'pending',
+          created_at: p.created_at,
+          updated_at: p.updated_at
+        }));
+        setProfessionals(mappedProfessionals);
       }
-    ];
 
-    setProfessionals(mockProfessionals);
-    setQuoteRequests(mockQuoteRequests);
-    
-    // Static analytics data for established platform
-    setAnalyticsData({
-      totalVisitors: 15847,
-      professionals: 142,
-      newProfessionals: 8,
-      weeklyVisitors: [245, 198, 312, 287, 356, 423, 398]
-    });
+      if (quoteError) {
+        console.error('Error fetching quotes:', quoteError);
+        toast({
+          title: "Error", 
+          description: "Failed to load quote requests",
+          variant: "destructive"
+        });
+      } else if (quoteData) {
+        setQuoteRequests(quoteData);
+      }
+      
+      // Update analytics with real data
+      setAnalyticsData({
+        totalVisitors: 15847, // Keep static for now
+        professionals: profData?.length || 0,
+        newProfessionals: profData?.filter(p => 
+          new Date(p.created_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+        ).length || 0,
+        weeklyVisitors: [245, 198, 312, 287, 356, 423, 398] // Keep static for now
+      });
+    } catch (error) {
+      console.error('Error loading data:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load admin data",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const deleteProfessional = async (professionalId: string) => {
+    try {
+      const { error } = await supabase
+        .from('professionals')
+        .delete()
+        .eq('id', professionalId);
+
+      if (error) {
+        console.error('Error deleting professional:', error);
+        toast({
+          title: "Error",
+          description: "Failed to delete professional",
+          variant: "destructive"
+        });
+      } else {
+        toast({
+          title: "Success",
+          description: "Professional deleted successfully"
+        });
+        // Reload data
+        loadData();
+      }
+    } catch (error) {
+      console.error('Error deleting professional:', error);
+      toast({
+        title: "Error",
+        description: "Failed to delete professional",
+        variant: "destructive"
+      });
+    }
   };
 
   useEffect(() => {
     if (isAuthenticated) {
-      loadStaticData();
+      loadData();
     }
   }, [isAuthenticated]);
   const handleLogin = (e: React.FormEvent) => {
@@ -310,7 +339,7 @@ export default function Admin() {
           </Card>
 
           {/* Recent Quote Requests */}
-          <Card className="shadow-card border-0 animate-slide-up animate-delay-200 lg:col-span-2">
+          <Card className="shadow-card border-0 animate-slide-up animate-delay-200">
             <CardHeader>
               <CardTitle>Recent Quote Requests</CardTitle>
             </CardHeader>
@@ -352,6 +381,177 @@ export default function Admin() {
                     )}
                   </tbody>
                 </table>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Professional Management */}
+          <Card className="shadow-card border-0 animate-slide-up animate-delay-300 lg:col-span-2">
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <Users className="mr-2 h-5 w-5" />
+                Professional Management
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {professionals.length === 0 ? (
+                  <div className="text-center py-8 text-muted-foreground">
+                    No professionals registered yet.
+                  </div>
+                ) : (
+                  professionals.map((professional) => (
+                    <div key={professional.id} className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
+                      <div className="flex-1">
+                        <div className="flex items-center space-x-4">
+                          <div>
+                            <h4 className="font-medium text-foreground">{professional.name}</h4>
+                            <div className="flex items-center space-x-4 mt-1 text-sm text-muted-foreground">
+                              <div className="flex items-center">
+                                <Mail className="h-3 w-3 mr-1" />
+                                {professional.email}
+                              </div>
+                              {professional.phone && (
+                                <div className="flex items-center">
+                                  <Phone className="h-3 w-3 mr-1" />
+                                  {professional.phone}
+                                </div>
+                              )}
+                              <Badge variant="outline" className="text-xs">
+                                {professional.specialty}
+                              </Badge>
+                              <Badge 
+                                variant={professional.status === 'approved' ? 'default' : 'secondary'}
+                                className="text-xs"
+                              >
+                                {professional.status}
+                              </Badge>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        {/* Professional Details Dialog */}
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <Button variant="outline" size="sm">
+                              <Eye className="h-4 w-4 mr-1" />
+                              View Details
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent className="max-w-2xl">
+                            <DialogHeader>
+                              <DialogTitle className="flex items-center">
+                                <User className="mr-2 h-5 w-5" />
+                                Professional Details
+                              </DialogTitle>
+                            </DialogHeader>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                              <div className="space-y-4">
+                                <div>
+                                  <h4 className="font-medium text-sm text-muted-foreground mb-1">Personal Information</h4>
+                                  <div className="space-y-2">
+                                    <p className="text-sm"><span className="font-medium">Name:</span> {professional.name}</p>
+                                    <p className="text-sm"><span className="font-medium">Email:</span> {professional.email}</p>
+                                    {professional.phone && (
+                                      <p className="text-sm"><span className="font-medium">Phone:</span> {professional.phone}</p>
+                                    )}
+                                  </div>
+                                </div>
+                                
+                                <div>
+                                  <h4 className="font-medium text-sm text-muted-foreground mb-1">Professional Details</h4>
+                                  <div className="space-y-2">
+                                    <p className="text-sm"><span className="font-medium">Specialty:</span> {professional.specialty}</p>
+                                    {professional.location && (
+                                      <p className="text-sm flex items-center">
+                                        <MapPin className="h-3 w-3 mr-1" />
+                                        {professional.location}
+                                      </p>
+                                    )}
+                                    {professional.hourly_rate && (
+                                      <p className="text-sm flex items-center">
+                                        <DollarSign className="h-3 w-3 mr-1" />
+                                        {professional.hourly_rate}
+                                      </p>
+                                    )}
+                                    {professional.experience && (
+                                      <p className="text-sm">
+                                        <span className="font-medium">Experience:</span> {professional.experience}
+                                      </p>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                              
+                              <div className="space-y-4">
+                                <div>
+                                  <h4 className="font-medium text-sm text-muted-foreground mb-1">Status & Dates</h4>
+                                  <div className="space-y-2">
+                                    <div className="flex items-center">
+                                      <Badge 
+                                        variant={professional.status === 'approved' ? 'default' : 'secondary'}
+                                        className="text-xs"
+                                      >
+                                        {professional.status}
+                                      </Badge>
+                                    </div>
+                                    <p className="text-sm flex items-center">
+                                      <Calendar className="h-3 w-3 mr-1" />
+                                      Registered: {new Date(professional.created_at).toLocaleDateString()}
+                                    </p>
+                                    <p className="text-sm flex items-center">
+                                      <Clock className="h-3 w-3 mr-1" />
+                                      Updated: {new Date(professional.updated_at).toLocaleDateString()}
+                                    </p>
+                                  </div>
+                                </div>
+                                
+                                {professional.description && (
+                                  <div>
+                                    <h4 className="font-medium text-sm text-muted-foreground mb-1 flex items-center">
+                                      <FileText className="h-3 w-3 mr-1" />
+                                      Description
+                                    </h4>
+                                    <p className="text-sm text-muted-foreground">{professional.description}</p>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </DialogContent>
+                        </Dialog>
+
+                        {/* Delete Professional Alert Dialog */}
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <Button variant="destructive" size="sm">
+                              <Trash2 className="h-4 w-4 mr-1" />
+                              Delete
+                            </Button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>Delete Professional</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                Are you sure you want to delete <strong>{professional.name}</strong>? 
+                                This action cannot be undone and will permanently remove all their information from the system.
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>Cancel</AlertDialogCancel>
+                              <AlertDialogAction 
+                                onClick={() => deleteProfessional(professional.id)}
+                                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                              >
+                                Delete Professional
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+                      </div>
+                    </div>
+                  ))
+                )}
               </div>
             </CardContent>
           </Card>
