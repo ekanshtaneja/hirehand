@@ -51,18 +51,11 @@ export default function Admin() {
   // Load real data from Supabase
   const loadData = async () => {
     try {
-      // Fetch professionals
-      const { data: profData, error: profError } = await supabase
-        .from('professionals')
-        .select('*')
-        .order('created_at', { ascending: false });
+      // Fetch professionals via admin RPC (SECURITY DEFINER)
+      const { data: profData, error: profError } = await (supabase as any).rpc('admin_get_professionals');
       
-      // Fetch quote requests  
-      const { data: quoteData, error: quoteError } = await supabase
-        .from('quote_requests')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(10);
+      // Fetch quote requests via admin RPC
+      const { data: quoteData, error: quoteError } = await (supabase as any).rpc('admin_get_quote_requests');
 
       if (profError) {
         console.error('Error fetching professionals:', profError);
@@ -73,7 +66,7 @@ export default function Admin() {
         });
       } else if (profData) {
         // Map the data to match our Professional type
-        const mappedProfessionals: Professional[] = profData.map((p: any) => ({
+        const mappedProfessionals: Professional[] = (profData as any[]).map((p: any) => ({
           id: p.id,
           name: p.name,
           email: p.email,
@@ -98,16 +91,28 @@ export default function Admin() {
           variant: "destructive"
         });
       } else if (quoteData) {
-        setQuoteRequests(quoteData);
+        // Map only the fields we use
+        const mappedQuotes: QuoteRequest[] = (quoteData as any[]).map((q: any) => ({
+          id: q.id,
+          name: q.name,
+          email: q.email,
+          service: q.service,
+          location: q.location,
+          budget: q.budget,
+          created_at: q.created_at,
+        }));
+        setQuoteRequests(mappedQuotes);
       }
       
-      // Update analytics with real data
+      // Update analytics with derived data
+      const profList = ((profData ?? []) as any[]);
+      const profCount = profList.length;
+      const newProfCount = profList.filter((p: any) => new Date(p.created_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)).length;
+
       setAnalyticsData({
         totalVisitors: 15847, // Keep static for now
-        professionals: profData?.length || 0,
-        newProfessionals: profData?.filter(p => 
-          new Date(p.created_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
-        ).length || 0,
+        professionals: profCount,
+        newProfessionals: newProfCount,
         weeklyVisitors: [245, 198, 312, 287, 356, 423, 398] // Keep static for now
       });
     } catch (error) {
@@ -122,10 +127,9 @@ export default function Admin() {
 
   const deleteProfessional = async (professionalId: string) => {
     try {
-      const { error } = await supabase
-        .from('professionals')
-        .delete()
-        .eq('id', professionalId);
+      const { error } = await (supabase as any).rpc('admin_delete_professional', {
+        professional_id: professionalId,
+      });
 
       if (error) {
         console.error('Error deleting professional:', error);
