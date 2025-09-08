@@ -32,16 +32,9 @@ export const ProviderCard = ({
 }: ProviderCardProps) => {
   return (
     <Card className="shadow-card hover:shadow-elevated transition-smooth border-0 overflow-hidden group">
-      {/* Portfolio Images Carousel */}
-      <div className="relative h-48 overflow-hidden">
-        <div className="flex animate-slide-up">
-          <img 
-            src={portfolioImages[0] || "/placeholder.svg"} 
-            alt={`${name} portfolio`}
-            className="w-full h-full object-cover group-hover:scale-110 transition-smooth"
-          />
-        </div>
-        <div className="absolute top-4 right-4">
+      {/* Service Style Badge */}
+      <div className="p-4 pb-0">
+        <div className="flex justify-end">
           <Badge variant="secondary" className="bg-white/90 text-foreground">
             {serviceStyle}
           </Badge>
