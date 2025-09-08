@@ -7,7 +7,6 @@ const teamMembers = [
     name: "Ekansh Taneja",
     role: "Founder & CEO",
     bio: "Passionate entrepreneur building the future of construction marketplace. Dedicated to connecting skilled professionals with homeowners who need quality work.",
-    image: "/lovable-uploads/ace5707d-f6b1-44d9-b465-6e794295714b.png",
     linkedin: "#",
     instagram: "https://www.instagram.com/ek_taneja/",
     email: "tanejas1000@gmail.com",
@@ -54,14 +53,12 @@ export default function Team() {
               style={{ animationDelay: `${index * 100}ms` }}
             >
               <CardContent className="p-6 text-center">
-                {/* Photo */}
+                {/* Profile Icon */}
                 <div className="relative mb-6">
-                  <div className="w-24 h-24 mx-auto rounded-full gradient-hero shadow-construction overflow-hidden">
-                    <img 
-                      src={member.image} 
-                      alt={member.name}
-                      className="w-full h-full object-cover"
-                    />
+                  <div className="w-24 h-24 mx-auto rounded-full gradient-hero shadow-construction flex items-center justify-center">
+                    <span className="text-3xl font-bold text-white">
+                      {member.name.split(' ').map(n => n[0]).join('')}
+                    </span>
                   </div>
                 </div>
 

@@ -57,6 +57,11 @@ export default function Admin() {
       // Fetch quote requests via admin RPC
       const { data: quoteData, error: quoteError } = await (supabase as any).rpc('admin_get_quote_requests');
 
+      // Fetch real visitor count from analytics
+      const { data: analyticsData, error: analyticsError } = await supabase
+        .from('analytics')
+        .select('*', { count: 'exact' });
+
       if (profError) {
         console.error('Error fetching professionals:', profError);
         toast({
@@ -104,13 +109,14 @@ export default function Admin() {
         setQuoteRequests(mappedQuotes);
       }
       
-      // Update analytics with derived data
+      // Update analytics with real data
       const profList = ((profData ?? []) as any[]);
       const profCount = profList.length;
       const newProfCount = profList.filter((p: any) => new Date(p.created_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)).length;
+      const realVisitorCount = analyticsError ? 0 : (analyticsData?.length || 0);
 
       setAnalyticsData({
-        totalVisitors: 15847, // Keep static for now
+        totalVisitors: realVisitorCount,
         professionals: profCount,
         newProfessionals: newProfCount,
         weeklyVisitors: [245, 198, 312, 287, 356, 423, 398] // Keep static for now
