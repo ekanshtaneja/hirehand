@@ -156,6 +156,35 @@ export default function Admin() {
     }
   };
 
+  const deleteAllProfessionals = async () => {
+    try {
+      const { data: deletedCount, error } = await (supabase as any).rpc('admin_delete_all_professionals');
+
+      if (error) {
+        console.error('Error deleting all professionals:', error);
+        toast({
+          title: "Error",
+          description: "Failed to delete all professionals",
+          variant: "destructive"
+        });
+      } else {
+        toast({
+          title: "Success",
+          description: `Successfully deleted ${deletedCount || 0} professionals`
+        });
+        // Reload data
+        loadData();
+      }
+    } catch (error) {
+      console.error('Error deleting all professionals:', error);
+      toast({
+        title: "Error",
+        description: "Failed to delete all professionals",
+        variant: "destructive"
+      });
+    }
+  };
+
   useEffect(() => {
     if (isAuthenticated) {
       loadData();
@@ -392,10 +421,40 @@ export default function Admin() {
           {/* Professional Management */}
           <Card className="shadow-card border-0 animate-slide-up animate-delay-300 lg:col-span-2">
             <CardHeader>
-              <CardTitle className="flex items-center">
-                <Users className="mr-2 h-5 w-5" />
-                Professional Management
-              </CardTitle>
+              <div className="flex items-center justify-between">
+                <CardTitle className="flex items-center">
+                  <Users className="mr-2 h-5 w-5" />
+                  Professional Management
+                </CardTitle>
+                {professionals.length > 0 && (
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button variant="destructive" size="sm">
+                        <Trash2 className="h-4 w-4 mr-2" />
+                        Delete All
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Delete All Professionals</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          Are you sure you want to delete <strong>all {professionals.length} professionals</strong>? 
+                          This action cannot be undone and will permanently remove all professional data from the system.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction 
+                          onClick={deleteAllProfessionals}
+                          className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                        >
+                          Delete All Professionals
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                )}
+              </div>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">

@@ -38,17 +38,63 @@ export type Database = {
         }
         Relationships: []
       }
+      contact_requests: {
+        Row: {
+          client_email: string
+          client_name: string
+          client_phone: string | null
+          created_at: string
+          id: string
+          message: string
+          professional_id: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          client_email: string
+          client_name: string
+          client_phone?: string | null
+          created_at?: string
+          id?: string
+          message: string
+          professional_id: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          client_email?: string
+          client_name?: string
+          client_phone?: string | null
+          created_at?: string
+          id?: string
+          message?: string
+          professional_id?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contact_requests_professional_id_fkey"
+            columns: ["professional_id"]
+            isOneToOne: false
+            referencedRelation: "professionals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       professionals: {
         Row: {
           created_at: string
           description: string | null
           email: string
           experience: string | null
+          hourly_rate: string | null
           id: string
           location: string | null
           name: string
           phone: string | null
           specialty: string
+          status: string
           updated_at: string
         }
         Insert: {
@@ -56,11 +102,13 @@ export type Database = {
           description?: string | null
           email: string
           experience?: string | null
+          hourly_rate?: string | null
           id?: string
           location?: string | null
           name: string
           phone?: string | null
           specialty: string
+          status?: string
           updated_at?: string
         }
         Update: {
@@ -68,11 +116,13 @@ export type Database = {
           description?: string | null
           email?: string
           experience?: string | null
+          hourly_rate?: string | null
           id?: string
           location?: string | null
           name?: string
           phone?: string | null
           specialty?: string
+          status?: string
           updated_at?: string
         }
         Relationships: []
@@ -116,12 +166,111 @@ export type Database = {
         }
         Relationships: []
       }
+      reviews: {
+        Row: {
+          client_email: string
+          client_name: string
+          comment: string | null
+          created_at: string
+          id: string
+          professional_id: string
+          rating: number
+          updated_at: string
+        }
+        Insert: {
+          client_email: string
+          client_name: string
+          comment?: string | null
+          created_at?: string
+          id?: string
+          professional_id: string
+          rating: number
+          updated_at?: string
+        }
+        Update: {
+          client_email?: string
+          client_name?: string
+          comment?: string | null
+          created_at?: string
+          id?: string
+          professional_id?: string
+          rating?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reviews_professional_id_fkey"
+            columns: ["professional_id"]
+            isOneToOne: false
+            referencedRelation: "professionals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      admin_delete_all_professionals: {
+        Args: Record<PropertyKey, never>
+        Returns: number
+      }
+      admin_delete_professional: {
+        Args: { professional_id: string }
+        Returns: undefined
+      }
+      admin_get_professionals: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          created_at: string
+          description: string
+          email: string
+          experience: string
+          hourly_rate: string
+          id: string
+          location: string
+          name: string
+          phone: string
+          specialty: string
+          status: string
+          updated_at: string
+        }[]
+      }
+      admin_get_quote_requests: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          budget: string
+          created_at: string
+          description: string
+          email: string
+          id: string
+          location: string
+          name: string
+          phone: string
+          service: string
+          updated_at: string
+        }[]
+      }
+      admin_update_professional_status: {
+        Args: { new_status: string; professional_id: string }
+        Returns: undefined
+      }
+      list_approved_professionals: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          created_at: string
+          description: string
+          experience: string
+          hourly_rate: string
+          id: string
+          location: string
+          name: string
+          specialty: string
+          status: string
+          updated_at: string
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never
