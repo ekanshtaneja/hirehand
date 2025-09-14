@@ -55,7 +55,7 @@ export default function GetQuote() {
     requirements: "",
     name: "",
     email: "",
-    phone: "",
+    
   });
   const [aiPrice, setAiPrice] = useState<{price: string, justification: string} | null>(null);
   const [isLoadingAI, setIsLoadingAI] = useState(false);
@@ -107,7 +107,7 @@ export default function GetQuote() {
         .insert({
           name: formData.name,
           email: formData.email,
-          phone: formData.phone,
+          
           service: formData.service,
           location: formData.location,
           description: `${formData.style} style. ${formData.requirements}`,
@@ -215,19 +215,6 @@ export default function GetQuote() {
                        />
                      </div>
 
-                     <div>
-                       <Label htmlFor="phone" className="text-base font-medium">
-                         Phone Number
-                       </Label>
-                       <Input
-                         id="phone"
-                         type="tel"
-                         value={formData.phone}
-                         onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                         placeholder="(555) 123-4567"
-                         className="mt-2"
-                       />
-                     </div>
                    </div>
 
                    {/* Location */}

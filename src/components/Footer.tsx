@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { HardHat, Phone, Mail, MapPin } from "lucide-react";
+import { HardHat, Mail, MapPin } from "lucide-react";
 export const Footer = () => {
   return <footer className="gradient-service text-white mt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -15,10 +15,6 @@ export const Footer = () => {
               Get quality work done with transparent pricing and reliable service.
             </p>
             <div className="flex space-x-4 text-white/60">
-              <div className="flex items-center space-x-2">
-                <Phone className="h-4 w-4" />
-                <span className="text-sm">+91 7973180034</span>
-              </div>
               <div className="flex items-center space-x-2">
                 <Mail className="h-4 w-4" />
                 <span className="text-sm">tanejas1000@gmail.com</span>

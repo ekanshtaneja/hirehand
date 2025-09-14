@@ -13,7 +13,7 @@ import {
   Star,
   UserPlus,
   Mail,
-  Phone,
+  
   Briefcase
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -60,7 +60,7 @@ export default function RegisterProfessional() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    phone: "",
+    
     specialty: "",
     bio: "",
   });
@@ -71,7 +71,7 @@ export default function RegisterProfessional() {
     e.preventDefault();
     
     // Validate form
-    if (!formData.name || !formData.email || !formData.phone || !formData.specialty || !formData.bio) {
+    if (!formData.name || !formData.email || !formData.specialty || !formData.bio) {
       toast({
         title: "Incomplete Form",
         description: "Please fill in all required fields.",
@@ -87,7 +87,7 @@ export default function RegisterProfessional() {
         .insert({
           name: formData.name,
           email: formData.email,
-          phone: formData.phone,
+          
           specialty: formData.specialty,
           description: formData.bio,
         });
@@ -238,24 +238,6 @@ export default function RegisterProfessional() {
                   </div>
                 </div>
 
-                {/* Phone */}
-                <div>
-                  <Label htmlFor="phone" className="text-base font-medium">
-                    Phone Number *
-                  </Label>
-                  <div className="relative mt-2">
-                    <Input
-                      id="phone"
-                      type="tel"
-                      value={formData.phone}
-                      onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                      placeholder="(555) 123-4567"
-                      className="pl-10"
-                      required
-                    />
-                    <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  </div>
-                </div>
 
                 {/* Specialty */}
                 <div>

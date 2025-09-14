@@ -20,7 +20,7 @@ const providers = [
     portfolioImages: ["/placeholder.svg"],
     specialty: "Interior Painting",
     bio: "Professional painter with 15+ years of experience. Specializing in high-quality interior and exterior painting with attention to detail.",
-    phone: "(555) 123-4567",
+    
     email: "mike@paintpro.com",
   },
   {
@@ -34,7 +34,7 @@ const providers = [
     portfolioImages: ["/placeholder.svg"],
     specialty: "Commercial Painting",
     bio: "Full-service painting company with modern equipment and eco-friendly materials. Licensed and insured.",
-    phone: "(555) 234-5678",
+    
     email: "info@sarahconstruction.com",
   },
   {
@@ -48,7 +48,7 @@ const providers = [
     portfolioImages: ["/placeholder.svg"],
     specialty: "Custom Furniture",
     bio: "Master carpenter creating beautiful custom furniture and built-ins. Every piece is crafted with precision and care.",
-    phone: "(555) 345-6789",
+    
     email: "tom@tomscarpentry.com",
   },
   {
@@ -62,7 +62,7 @@ const providers = [
     portfolioImages: ["/placeholder.svg"],
     specialty: "Smart Home Wiring",
     bio: "Modern electrical solutions for smart homes. Certified electricians with latest technology and safety standards.",
-    phone: "(555) 456-7890",
+    
     email: "service@electritech.com",
   },
   {
@@ -76,7 +76,7 @@ const providers = [
     portfolioImages: ["/placeholder.svg"],
     specialty: "Residential Design",
     bio: "Award-winning interior designer transforming homes with elegant, functional designs that reflect your personality.",
-    phone: "(555) 567-8901",
+    
     email: "maria@mariasinteriors.com",
   },
   {
@@ -90,7 +90,7 @@ const providers = [
     portfolioImages: ["/placeholder.svg"],
     specialty: "Brick Restoration",
     bio: "Specializing in historic brick restoration and modern masonry work. Preserving the past while building the future.",
-    phone: "(555) 678-9012",
+    
     email: "info@brooklynmasonry.com",
   },
 ];

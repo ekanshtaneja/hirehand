@@ -5,15 +5,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Phone, Mail, MapPin, Clock, MessageSquare, Send, CheckCircle, Star } from "lucide-react";
+import { Mail, MapPin, Clock, MessageSquare, Send, CheckCircle, Star } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 const contactMethods = [{
-  icon: Phone,
-  title: "Phone Support",
-  details: "7973180034",
-  description: "Available for urgent matters",
-  action: "Call Now"
-}, {
   icon: Mail,
   title: "Email Support",
   details: "tanejas1000@gmail.com",

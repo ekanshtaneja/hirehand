@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-import { Users, UserPlus, Eye, BarChart3, TrendingUp, Clock, Mail, Phone, Shield, Trash2, User, MapPin, DollarSign, Calendar, FileText } from "lucide-react";
+import { Users, UserPlus, Eye, BarChart3, TrendingUp, Clock, Mail, Shield, Trash2, User, MapPin, DollarSign, Calendar, FileText } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 const ADMIN_PASSWORD = "admin123"; // In real app, this would be properly secured
@@ -15,7 +15,7 @@ type Professional = {
   id: string;
   name: string;
   email: string;
-  phone?: string;
+  
   specialty: string;
   location?: string;
   description?: string;
@@ -75,7 +75,7 @@ export default function Admin() {
           id: p.id,
           name: p.name,
           email: p.email,
-          phone: p.phone,
+          
           specialty: p.specialty,
           location: p.location,
           description: p.description,
@@ -480,12 +480,6 @@ export default function Admin() {
                                 <Mail className="h-3 w-3 mr-1" />
                                 {professional.email}
                               </div>
-                              {professional.phone && (
-                                <div className="flex items-center">
-                                  <Phone className="h-3 w-3 mr-1" />
-                                  {professional.phone}
-                                </div>
-                              )}
                               <Badge variant="outline" className="text-xs">
                                 {professional.specialty}
                               </Badge>
@@ -522,9 +516,6 @@ export default function Admin() {
                                   <div className="space-y-2">
                                     <p className="text-sm"><span className="font-medium">Name:</span> {professional.name}</p>
                                     <p className="text-sm"><span className="font-medium">Email:</span> {professional.email}</p>
-                                    {professional.phone && (
-                                      <p className="text-sm"><span className="font-medium">Phone:</span> {professional.phone}</p>
-                                    )}
                                   </div>
                                 </div>
                                 

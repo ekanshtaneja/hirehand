@@ -1,6 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Linkedin, Instagram, Mail, Phone } from "lucide-react";
+import { Linkedin, Instagram, Mail } from "lucide-react";
 
 const teamMembers = [
   {
@@ -10,7 +10,7 @@ const teamMembers = [
     linkedin: "#",
     instagram: "https://www.instagram.com/ek_taneja/",
     email: "tanejas1000@gmail.com",
-    phone: "7973180034"
+    
   },
   {
     name: "Kaashvi Chhabra",
@@ -19,7 +19,7 @@ const teamMembers = [
     linkedin: "#",
     instagram: "https://www.instagram.com/kaashvi_chhabra_?utm_source=ig_web_button_share_sheet&igsh=aXBpNXc3cXowYThp",
     email: "kaashvichhabra93@gmail.com",
-    phone: ""
+    
   }
 ];
 
@@ -93,13 +93,6 @@ export default function Team() {
                       <Mail className="h-4 w-4" />
                     </a>
                   </Button>
-                  {member.phone && (
-                    <Button variant="ghost" size="icon" asChild>
-                      <a href={`tel:${member.phone}`}>
-                        <Phone className="h-4 w-4" />
-                      </a>
-                    </Button>
-                  )}
                 </div>
               </CardContent>
             </Card>

@@ -1,7 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Star, MapPin, Phone, Mail } from "lucide-react";
+import { Star, MapPin, Mail } from "lucide-react";
 
 interface ProviderCardProps {
   name: string;
@@ -13,7 +13,7 @@ interface ProviderCardProps {
   portfolioImages: string[];
   specialty: string;
   bio: string;
-  phone?: string;
+  
   email?: string;
 }
 
@@ -27,7 +27,7 @@ export const ProviderCard = ({
   portfolioImages,
   specialty,
   bio,
-  phone,
+  
   email,
 }: ProviderCardProps) => {
   return (
@@ -82,12 +82,6 @@ export const ProviderCard = ({
 
         {/* Contact Info */}
         <div className="flex flex-col space-y-2 mb-4">
-          {phone && (
-            <div className="flex items-center text-sm text-muted-foreground">
-              <Phone className="h-4 w-4 mr-2" />
-              {phone}
-            </div>
-          )}
           {email && (
             <div className="flex items-center text-sm text-muted-foreground">
               <Mail className="h-4 w-4 mr-2" />
