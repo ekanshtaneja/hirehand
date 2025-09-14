@@ -11,6 +11,15 @@ const teamMembers = [
     instagram: "https://www.instagram.com/ek_taneja/",
     email: "tanejas1000@gmail.com",
     phone: "7973180034"
+  },
+  {
+    name: "Kaashvi Chhabra",
+    role: "Co-Founder",
+    bio: "Visionary co-founder committed to transforming the construction industry through innovative solutions and exceptional customer experiences.",
+    linkedin: "#",
+    instagram: "https://www.instagram.com/kaashvi_chhabra_?utm_source=ig_web_button_share_sheet&igsh=aXBpNXc3cXowYThp",
+    email: "kaashvichhabra93@gmail.com",
+    phone: ""
   }
 ];
 
@@ -21,7 +30,7 @@ export default function Team() {
         {/* Header */}
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-            Meet Our Founder
+            Meet Our Team
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
             Passionate about revolutionizing the construction industry by connecting skilled professionals with homeowners who need quality work.
@@ -44,8 +53,7 @@ export default function Team() {
         </Card>
 
         {/* Team Grid */}
-        <div className="flex justify-center mb-16">
-          <div className="max-w-md w-full">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-16">
           {teamMembers.map((member, index) => (
             <Card 
               key={index} 
@@ -85,16 +93,17 @@ export default function Team() {
                       <Mail className="h-4 w-4" />
                     </a>
                   </Button>
-                  <Button variant="ghost" size="icon" asChild>
-                    <a href={`tel:${member.phone}`}>
-                      <Phone className="h-4 w-4" />
-                    </a>
-                  </Button>
+                  {member.phone && (
+                    <Button variant="ghost" size="icon" asChild>
+                      <a href={`tel:${member.phone}`}>
+                        <Phone className="h-4 w-4" />
+                      </a>
+                    </Button>
+                  )}
                 </div>
               </CardContent>
             </Card>
             ))}
-          </div>
         </div>
 
         {/* Company Values */}
