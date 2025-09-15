@@ -10,7 +10,10 @@ import { Search, Filter } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 const fetchProfessionals = async () => {
-  const { data, error } = await supabase.rpc('list_approved_professionals');
+  const { data, error } = await supabase
+    .from('professionals')
+    .select('*')
+    .order('created_at', { ascending: false });
   if (error) throw error;
   return data || [];
 };
