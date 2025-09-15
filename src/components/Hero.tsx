@@ -43,13 +43,7 @@ export const Hero = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto animate-delay-300">
             
             
-            <div className="glass-effect rounded-xl p-6 shadow-elevated">
-              <div className="flex items-center justify-center mb-2">
-                <Star className="h-8 w-8 text-construction-yellow" />
-              </div>
-              <div className="text-3xl font-bold mb-1">4.9/5</div>
-              <div className="text-white/80">Average Rating</div>
-            </div>
+            
             
             <div className="glass-effect rounded-xl p-6 shadow-elevated">
               <div className="flex items-center justify-center mb-2">
