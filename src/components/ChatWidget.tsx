@@ -141,7 +141,7 @@ export const ChatWidget = () => {
             )}
             <div ref={messagesEndRef} />
           </div>
-          <div className="p-4 border-t">
+          <div className="p-3 border-t">
             <div className="flex gap-2">
               <Input
                 value={inputMessage}
