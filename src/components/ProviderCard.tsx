@@ -1,34 +1,31 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Star, MapPin, Mail } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { MapPin, Mail, Clock, Briefcase } from "lucide-react";
 
 interface ProviderCardProps {
   name: string;
   location: string;
-  rating: number;
-  reviewCount: number;
   serviceStyle: string;
   startingPrice: number;
-  portfolioImages: string[];
   specialty: string;
   bio: string;
-  
+  experience?: string;
   email?: string;
+  phone?: string;
 }
 
 export const ProviderCard = ({
   name,
   location,
-  rating,
-  reviewCount,
   serviceStyle,
   startingPrice,
-  portfolioImages,
   specialty,
   bio,
-  
+  experience,
   email,
+  phone,
 }: ProviderCardProps) => {
   return (
     <Card className="shadow-card hover:shadow-elevated transition-smooth border-0 overflow-hidden group">
@@ -50,15 +47,12 @@ export const ProviderCard = ({
               <MapPin className="h-4 w-4 mr-1" />
               {location}
             </div>
-            <div className="flex items-center mb-2">
-              <div className="flex items-center mr-3">
-                <Star className="h-4 w-4 text-construction-yellow fill-current mr-1" />
-                <span className="font-medium">{rating}</span>
-                <span className="text-muted-foreground text-sm ml-1">
-                  ({reviewCount} reviews)
-                </span>
+            {experience && (
+              <div className="flex items-center text-muted-foreground text-sm">
+                <Clock className="h-4 w-4 mr-1" />
+                {experience} experience
               </div>
-            </div>
+            )}
           </div>
           <div className="text-right">
             <div className="text-2xl font-bold text-primary">
@@ -95,9 +89,91 @@ export const ProviderCard = ({
           <Button variant="default" size="sm" className="flex-1">
             Contact
           </Button>
-          <Button variant="outline" size="sm" className="flex-1">
-            View Profile
-          </Button>
+          
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant="outline" size="sm" className="flex-1">
+                View Profile
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-md">
+              <DialogHeader>
+                <DialogTitle className="flex items-center">
+                  <Briefcase className="h-5 w-5 mr-2" />
+                  {name}'s Profile
+                </DialogTitle>
+              </DialogHeader>
+              
+              <div className="space-y-4">
+                {/* Basic Info */}
+                <div>
+                  <h4 className="font-medium mb-2">Professional Details</h4>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex items-center">
+                      <MapPin className="h-4 w-4 mr-2 text-muted-foreground" />
+                      <span>{location}</span>
+                    </div>
+                    {experience && (
+                      <div className="flex items-center">
+                        <Clock className="h-4 w-4 mr-2 text-muted-foreground" />
+                        <span>{experience} experience</span>
+                      </div>
+                    )}
+                    <div className="flex items-center">
+                      <Briefcase className="h-4 w-4 mr-2 text-muted-foreground" />
+                      <span>{specialty}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Pricing */}
+                <div>
+                  <h4 className="font-medium mb-2">Pricing</h4>
+                  <div className="text-2xl font-bold text-primary">
+                    ₹{startingPrice.toLocaleString('en-IN')}
+                  </div>
+                  <div className="text-sm text-muted-foreground">per hour (starting rate)</div>
+                  <Badge variant="secondary" className="mt-2">
+                    {serviceStyle}
+                  </Badge>
+                </div>
+
+                {/* Bio */}
+                <div>
+                  <h4 className="font-medium mb-2">About</h4>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    {bio}
+                  </p>
+                </div>
+
+                {/* Contact Info */}
+                {(email || phone) && (
+                  <div>
+                    <h4 className="font-medium mb-2">Contact Information</h4>
+                    <div className="space-y-2 text-sm">
+                      {email && (
+                        <div className="flex items-center">
+                          <Mail className="h-4 w-4 mr-2 text-muted-foreground" />
+                          <span>{email}</span>
+                        </div>
+                      )}
+                      {phone && (
+                        <div className="flex items-center">
+                          <span className="h-4 w-4 mr-2 text-muted-foreground">📞</span>
+                          <span>{phone}</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Contact Button */}
+                <Button className="w-full">
+                  Contact {name}
+                </Button>
+              </div>
+            </DialogContent>
+          </Dialog>
         </div>
       </CardContent>
     </Card>

@@ -37,14 +37,13 @@ export default function Quotes() {
       id: prof.id,
       name: prof.name || 'Unknown',
       location: prof.location || 'Location not specified',
-      rating: 4.5 + Math.random() * 0.5, // Random rating between 4.5-5.0
-      reviewCount: Math.floor(Math.random() * 100) + 20, // Random reviews 20-120
       serviceStyle: Math.random() > 0.5 ? "Labor-based" : "Machine-assisted",
       startingPrice: prof.hourly_rate ? (parseInt(prof.hourly_rate.replace(/[^0-9]/g, '')) || 50) * 10 : 500,
-      portfolioImages: ["/placeholder.svg"],
       specialty: prof.specialty || 'General Services',
       bio: prof.description || 'Professional service provider with years of experience.',
+      experience: prof.experience || undefined,
       email: prof.email,
+      phone: prof.phone || undefined,
     }));
   }, [professionals]);
 
