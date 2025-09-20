@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-import { Users, UserPlus, Eye, BarChart3, TrendingUp, Clock, Mail, Shield, Trash2, User, MapPin, DollarSign, Calendar, FileText } from "lucide-react";
+import { Users, UserPlus, Eye, BarChart3, TrendingUp, Clock, Mail, Shield, Trash2, User, MapPin, DollarSign, Calendar, FileText, MessageSquare, Star } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 const ADMIN_PASSWORD = "admin123"; // In real app, this would be properly secured
@@ -35,11 +35,31 @@ type QuoteRequest = {
   budget: string;
   created_at: string;
 };
+
+type ContactRequest = {
+  id: string;
+  client_name: string;
+  client_email: string;
+  message: string;
+  status: string;
+  created_at: string;
+};
+
+type Review = {
+  id: string;
+  client_name: string;
+  client_email: string;
+  rating: number;
+  comment: string;
+  created_at: string;
+};
 export default function Admin() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState("");
   const [professionals, setProfessionals] = useState<Professional[]>([]);
   const [quoteRequests, setQuoteRequests] = useState<QuoteRequest[]>([]);
+  const [contactRequests, setContactRequests] = useState<ContactRequest[]>([]);
+  const [reviews, setReviews] = useState<Review[]>([]);
   const [analyticsData, setAnalyticsData] = useState({
     totalVisitors: 0,
     professionals: 0,
@@ -56,6 +76,20 @@ export default function Admin() {
       
       // Fetch quote requests via admin RPC
       const { data: quoteData, error: quoteError } = await (supabase as any).rpc('admin_get_quote_requests');
+
+      // Fetch contact requests
+      const { data: contactData, error: contactError } = await supabase
+        .from('contact_requests')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(10);
+
+      // Fetch reviews
+      const { data: reviewData, error: reviewError } = await supabase
+        .from('reviews')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(10);
 
       // Fetch real visitor count from analytics
       const { data: analyticsData, error: analyticsError } = await supabase
@@ -107,6 +141,18 @@ export default function Admin() {
           created_at: q.created_at,
         }));
         setQuoteRequests(mappedQuotes);
+      }
+
+      if (contactError) {
+        console.error('Error fetching contacts:', contactError);
+      } else if (contactData) {
+        setContactRequests(contactData);
+      }
+
+      if (reviewError) {
+        console.error('Error fetching reviews:', reviewError);
+      } else if (reviewData) {
+        setReviews(reviewData);
       }
       
       // Update analytics with real data
@@ -424,8 +470,103 @@ export default function Admin() {
             </CardContent>
           </Card>
 
+          {/* Contact Requests */}
+          <Card className="shadow-card border-0 animate-slide-up animate-delay-300">
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <MessageSquare className="mr-2 h-5 w-5" />
+                Contact Requests
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {contactRequests.length === 0 ? (
+                  <div className="text-center py-8 text-muted-foreground">
+                    No contact requests yet.
+                  </div>
+                ) : (
+                  contactRequests.map((contact) => (
+                    <div key={contact.id} className="p-4 bg-muted/50 rounded-lg">
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <h4 className="font-medium text-foreground">{contact.client_name}</h4>
+                          <div className="flex items-center space-x-2 mt-1">
+                            <Mail className="h-3 w-3 text-muted-foreground" />
+                            <span className="text-sm text-muted-foreground">{contact.client_email}</span>
+                            <Badge variant="outline" className="text-xs">
+                              {contact.status}
+                            </Badge>
+                          </div>
+                          <p className="text-sm text-foreground mt-2 line-clamp-2">{contact.message}</p>
+                        </div>
+                        <div className="text-right ml-4">
+                          <div className="text-sm text-muted-foreground">
+                            {new Date(contact.created_at).toLocaleDateString()}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Reviews */}
+          <Card className="shadow-card border-0 animate-slide-up animate-delay-400">
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <Star className="mr-2 h-5 w-5" />
+                Platform Reviews
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {reviews.length === 0 ? (
+                  <div className="text-center py-8 text-muted-foreground">
+                    No reviews yet.
+                  </div>
+                ) : (
+                  reviews.map((review) => (
+                    <div key={review.id} className="p-4 bg-muted/50 rounded-lg">
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <div className="flex items-center space-x-2">
+                            <h4 className="font-medium text-foreground">{review.client_name}</h4>
+                            <div className="flex items-center">
+                              {[...Array(5)].map((_, i) => (
+                                <Star
+                                  key={i}
+                                  className={`h-3 w-3 ${
+                                    i < review.rating 
+                                      ? 'text-yellow-400 fill-current' 
+                                      : 'text-muted-foreground'
+                                  }`}
+                                />
+                              ))}
+                            </div>
+                          </div>
+                          <div className="flex items-center space-x-2 mt-1">
+                            <Mail className="h-3 w-3 text-muted-foreground" />
+                            <span className="text-sm text-muted-foreground">{review.client_email}</span>
+                          </div>
+                          <p className="text-sm text-foreground mt-2 line-clamp-2">{review.comment}</p>
+                        </div>
+                        <div className="text-right ml-4">
+                          <div className="text-sm text-muted-foreground">
+                            {new Date(review.created_at).toLocaleDateString()}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </CardContent>
+          </Card>
+
           {/* Professional Management */}
-          <Card className="shadow-card border-0 animate-slide-up animate-delay-300 lg:col-span-2">
+          <Card className="shadow-card border-0 animate-slide-up animate-delay-500 lg:col-span-2">
             <CardHeader>
               <div className="flex items-center justify-between">
                 <CardTitle className="flex items-center">

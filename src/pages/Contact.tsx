@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Mail, MapPin, Clock, MessageSquare, Send, CheckCircle, Star } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 const contactMethods = [{
   icon: Mail,
   title: "Email Support",
@@ -38,7 +39,7 @@ export default function Contact() {
   const {
     toast
   } = useToast();
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.email || !formData.message || !formData.inquiryType) {
       toast({
@@ -49,15 +50,42 @@ export default function Contact() {
       return;
     }
 
-    // Submit form (mock)
-    console.log("Contact form submitted:", formData);
-    setIsSubmitted(true);
-    toast({
-      title: "Message Sent",
-      description: "Thank you for your message! We'll get back to you soon."
-    });
+    try {
+      // Insert contact request into database
+      const { error } = await supabase
+        .from('contact_requests')
+        .insert({
+          client_name: formData.name,
+          client_email: formData.email,
+          message: `${formData.subject ? formData.subject + ': ' : ''}${formData.message} (Inquiry Type: ${formData.inquiryType})`,
+          professional_id: '00000000-0000-0000-0000-000000000000' // General contact, not for specific professional
+        });
+
+      if (error) {
+        console.error('Error saving contact:', error);
+        toast({
+          title: "Error",
+          description: "Failed to send message. Please try again.",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      setIsSubmitted(true);
+      toast({
+        title: "Message Sent",
+        description: "Thank you for your message! We'll get back to you soon."
+      });
+    } catch (error) {
+      console.error('Error submitting contact:', error);
+      toast({
+        title: "Error",
+        description: "Failed to send message. Please try again.",
+        variant: "destructive"
+      });
+    }
   };
-  const handleReviewSubmit = (e: React.FormEvent) => {
+  const handleReviewSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!reviewData.name || !reviewData.email || !reviewData.rating || !reviewData.review) {
       toast({
@@ -68,18 +96,46 @@ export default function Contact() {
       return;
     }
 
-    // Submit review (mock)
-    console.log("Review submitted:", reviewData);
-    toast({
-      title: "Review Submitted",
-      description: "Thank you for your feedback! Your review helps us improve."
-    });
-    setReviewData({
-      name: "",
-      email: "",
-      rating: "",
-      review: ""
-    });
+    try {
+      // Insert review into database
+      const { error } = await supabase
+        .from('reviews')
+        .insert({
+          client_name: reviewData.name,
+          client_email: reviewData.email,
+          rating: parseInt(reviewData.rating),
+          comment: reviewData.review,
+          professional_id: '00000000-0000-0000-0000-000000000000' // General review, not for specific professional
+        });
+
+      if (error) {
+        console.error('Error saving review:', error);
+        toast({
+          title: "Error",
+          description: "Failed to submit review. Please try again.",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      toast({
+        title: "Review Submitted",
+        description: "Thank you for your feedback! Your review helps us improve."
+      });
+      setReviewData({
+        name: "",
+        email: "",
+        rating: "",
+        review: ""
+      });
+    } catch (error) {
+      console.error('Error submitting review:', error);
+      toast({
+        title: "Error",
+        description: "Failed to submit review. Please try again.",
+        variant: "destructive"
+      });
+    }
   };
   if (isSubmitted) {
     return <div className="min-h-screen bg-gradient-to-b from-background to-accent/20 flex items-center justify-center py-12">
