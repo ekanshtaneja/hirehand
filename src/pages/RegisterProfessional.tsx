@@ -13,7 +13,10 @@ import {
   Star,
   UserPlus,
   Mail,
-  
+  Phone,
+  MapPin,
+  Clock,
+  DollarSign,
   Briefcase
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -60,7 +63,10 @@ export default function RegisterProfessional() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    
+    phone: "",
+    location: "",
+    experience: "",
+    hourlyRate: "",
     specialty: "",
     bio: "",
   });
@@ -71,7 +77,7 @@ export default function RegisterProfessional() {
     e.preventDefault();
     
     // Validate form
-    if (!formData.name || !formData.email || !formData.specialty || !formData.bio) {
+    if (!formData.name || !formData.email || !formData.phone || !formData.location || !formData.specialty || !formData.bio || !formData.hourlyRate) {
       toast({
         title: "Incomplete Form",
         description: "Please fill in all required fields.",
@@ -87,7 +93,10 @@ export default function RegisterProfessional() {
         .insert({
           name: formData.name,
           email: formData.email,
-          
+          phone: formData.phone,
+          location: formData.location,
+          experience: formData.experience,
+          hourly_rate: formData.hourlyRate,
           specialty: formData.specialty,
           description: formData.bio,
         });
@@ -98,7 +107,7 @@ export default function RegisterProfessional() {
       
       toast({
         title: "Registration Submitted",
-        description: "Thank you for joining HireHand! We'll review your application and get back to you soon.",
+        description: "Your profile is now live! Customers can see you in the professional listings immediately.",
       });
     } catch (error) {
       console.error('Error submitting registration:', error);
@@ -235,6 +244,78 @@ export default function RegisterProfessional() {
                       required
                     />
                     <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  </div>
+                </div>
+
+                {/* Phone */}
+                <div>
+                  <Label htmlFor="phone" className="text-base font-medium">
+                    Phone Number *
+                  </Label>
+                  <div className="relative mt-2">
+                    <Input
+                      id="phone"
+                      type="tel"
+                      value={formData.phone}
+                      onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                      placeholder="+91 98765 43210"
+                      className="pl-10"
+                      required
+                    />
+                    <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  </div>
+                </div>
+
+                {/* Location */}
+                <div>
+                  <Label htmlFor="location" className="text-base font-medium">
+                    Service Location *
+                  </Label>
+                  <div className="relative mt-2">
+                    <Input
+                      id="location"
+                      value={formData.location}
+                      onChange={(e) => setFormData({...formData, location: e.target.value})}
+                      placeholder="e.g., Mumbai, Maharashtra"
+                      className="pl-10"
+                      required
+                    />
+                    <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  </div>
+                </div>
+
+                {/* Experience */}
+                <div>
+                  <Label htmlFor="experience" className="text-base font-medium">
+                    Years of Experience
+                  </Label>
+                  <div className="relative mt-2">
+                    <Input
+                      id="experience"
+                      value={formData.experience}
+                      onChange={(e) => setFormData({...formData, experience: e.target.value})}
+                      placeholder="e.g., 5 years"
+                      className="pl-10"
+                    />
+                    <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  </div>
+                </div>
+
+                {/* Hourly Rate */}
+                <div>
+                  <Label htmlFor="hourlyRate" className="text-base font-medium">
+                    Hourly Rate (₹) *
+                  </Label>
+                  <div className="relative mt-2">
+                    <Input
+                      id="hourlyRate"
+                      value={formData.hourlyRate}
+                      onChange={(e) => setFormData({...formData, hourlyRate: e.target.value})}
+                      placeholder="e.g., 500"
+                      className="pl-10"
+                      required
+                    />
+                    <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   </div>
                 </div>
 

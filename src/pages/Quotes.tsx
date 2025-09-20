@@ -26,9 +26,10 @@ export default function Quotes() {
     serviceStyle: "",
   });
 
-  const { data: professionals = [], isLoading, error } = useQuery({
+  const { data: professionals = [], isLoading, error, refetch } = useQuery({
     queryKey: ['professionals'],
     queryFn: fetchProfessionals,
+    refetchInterval: 30000, // Refetch every 30 seconds to show new registrations
   });
 
   const transformedProfessionals = useMemo(() => {
