@@ -40,11 +40,7 @@ export const Hero = () => {
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto animate-delay-300">
-            
-            
-            
-            
+          <div className="flex justify-center max-w-4xl mx-auto animate-delay-300">
             <div className="glass-effect rounded-xl p-6 shadow-elevated">
               <div className="flex items-center justify-center mb-2">
                 <Shield className="h-8 w-8 text-construction-safety" />
