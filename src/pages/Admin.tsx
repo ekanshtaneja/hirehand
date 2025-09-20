@@ -15,7 +15,6 @@ type Professional = {
   id: string;
   name: string;
   email: string;
-  
   specialty: string;
   location?: string;
   description?: string;
@@ -25,7 +24,6 @@ type Professional = {
   created_at: string;
   updated_at: string;
 };
-
 type QuoteRequest = {
   id: string;
   name: string;
@@ -35,7 +33,6 @@ type QuoteRequest = {
   budget: string;
   created_at: string;
 };
-
 type ContactRequest = {
   id: string;
   client_name: string;
@@ -44,7 +41,6 @@ type ContactRequest = {
   status: string;
   created_at: string;
 };
-
 type Review = {
   id: string;
   client_name: string;
@@ -66,36 +62,48 @@ export default function Admin() {
     newProfessionals: 0,
     weeklyVisitors: [0, 0, 0, 0, 0, 0, 0]
   });
-  const { toast } = useToast();
+  const {
+    toast
+  } = useToast();
 
   // Load real data from Supabase
   const loadData = async () => {
     try {
       // Fetch professionals via admin RPC (SECURITY DEFINER)
-      const { data: profData, error: profError } = await (supabase as any).rpc('admin_get_professionals');
-      
+      const {
+        data: profData,
+        error: profError
+      } = await (supabase as any).rpc('admin_get_professionals');
+
       // Fetch quote requests via admin RPC
-      const { data: quoteData, error: quoteError } = await (supabase as any).rpc('admin_get_quote_requests');
+      const {
+        data: quoteData,
+        error: quoteError
+      } = await (supabase as any).rpc('admin_get_quote_requests');
 
       // Fetch contact requests
-      const { data: contactData, error: contactError } = await supabase
-        .from('contact_requests')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(10);
+      const {
+        data: contactData,
+        error: contactError
+      } = await supabase.from('contact_requests').select('*').order('created_at', {
+        ascending: false
+      }).limit(10);
 
       // Fetch reviews
-      const { data: reviewData, error: reviewError } = await supabase
-        .from('reviews')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(10);
+      const {
+        data: reviewData,
+        error: reviewError
+      } = await supabase.from('reviews').select('*').order('created_at', {
+        ascending: false
+      }).limit(10);
 
       // Fetch real visitor count from analytics
-      const { data: analyticsData, error: analyticsError } = await supabase
-        .from('analytics')
-        .select('*', { count: 'exact' });
-
+      const {
+        data: analyticsData,
+        error: analyticsError
+      } = await supabase.from('analytics').select('*', {
+        count: 'exact'
+      });
       if (profError) {
         console.error('Error fetching professionals:', profError);
         toast({
@@ -109,7 +117,6 @@ export default function Admin() {
           id: p.id,
           name: p.name,
           email: p.email,
-          
           specialty: p.specialty,
           location: p.location,
           description: p.description,
@@ -121,11 +128,10 @@ export default function Admin() {
         }));
         setProfessionals(mappedProfessionals);
       }
-
       if (quoteError) {
         console.error('Error fetching quotes:', quoteError);
         toast({
-          title: "Error", 
+          title: "Error",
           description: "Failed to load quote requests",
           variant: "destructive"
         });
@@ -138,29 +144,26 @@ export default function Admin() {
           service: q.service,
           location: q.location,
           budget: q.budget,
-          created_at: q.created_at,
+          created_at: q.created_at
         }));
         setQuoteRequests(mappedQuotes);
       }
-
       if (contactError) {
         console.error('Error fetching contacts:', contactError);
       } else if (contactData) {
         setContactRequests(contactData);
       }
-
       if (reviewError) {
         console.error('Error fetching reviews:', reviewError);
       } else if (reviewData) {
         setReviews(reviewData);
       }
-      
+
       // Update analytics with real data
-      const profList = ((profData ?? []) as any[]);
+      const profList = (profData ?? []) as any[];
       const profCount = profList.length;
       const newProfCount = profList.filter((p: any) => new Date(p.created_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)).length;
-      const realVisitorCount = analyticsError ? 0 : (analyticsData?.length || 0);
-
+      const realVisitorCount = analyticsError ? 0 : analyticsData?.length || 0;
       setAnalyticsData({
         totalVisitors: realVisitorCount,
         professionals: profCount,
@@ -176,13 +179,13 @@ export default function Admin() {
       });
     }
   };
-
   const deleteProfessional = async (professionalId: string) => {
     try {
-      const { error } = await (supabase as any).rpc('admin_delete_professional', {
-        professional_id: professionalId,
+      const {
+        error
+      } = await (supabase as any).rpc('admin_delete_professional', {
+        professional_id: professionalId
       });
-
       if (error) {
         console.error('Error deleting professional:', error);
         toast({
@@ -207,11 +210,12 @@ export default function Admin() {
       });
     }
   };
-
   const deleteAllProfessionals = async () => {
     try {
-      const { data: deletedCount, error } = await (supabase as any).rpc('admin_delete_all_professionals');
-
+      const {
+        data: deletedCount,
+        error
+      } = await (supabase as any).rpc('admin_delete_all_professionals');
       if (error) {
         console.error('Error deleting all professionals:', error);
         toast({
@@ -236,7 +240,6 @@ export default function Admin() {
       });
     }
   };
-
   useEffect(() => {
     if (isAuthenticated) {
       loadData();
@@ -309,11 +312,7 @@ export default function Admin() {
                   <Eye className="h-6 w-6 text-white" />
                 </div>
               </div>
-              <div className="flex items-center mt-4 text-sm">
-                <TrendingUp className="h-4 w-4 text-construction-safety mr-1" />
-                <span className="text-construction-safety font-medium">+12%</span>
-                <span className="text-muted-foreground ml-1">from last month</span>
-              </div>
+              
             </CardContent>
           </Card>
 
@@ -328,11 +327,7 @@ export default function Admin() {
                   <Users className="h-6 w-6 text-white" />
                 </div>
               </div>
-              <div className="flex items-center mt-4 text-sm">
-                <TrendingUp className="h-4 w-4 text-construction-safety mr-1" />
-                <span className="text-construction-safety font-medium">+8%</span>
-                <span className="text-muted-foreground ml-1">from last month</span>
-              </div>
+              
             </CardContent>
           </Card>
 
@@ -347,11 +342,7 @@ export default function Admin() {
                   <UserPlus className="h-6 w-6 text-construction-steel" />
                 </div>
               </div>
-              <div className="flex items-center mt-4 text-sm">
-                <TrendingUp className="h-4 w-4 text-construction-safety mr-1" />
-                <span className="text-construction-safety font-medium">+23%</span>
-                <span className="text-muted-foreground ml-1">this week</span>
-              </div>
+              
             </CardContent>
           </Card>
         </div>
@@ -392,13 +383,9 @@ export default function Admin() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {professionals.length === 0 ? (
-                  <div className="text-center py-8 text-muted-foreground">
+                {professionals.length === 0 ? <div className="text-center py-8 text-muted-foreground">
                     No professionals registered yet.
-                  </div>
-                ) : (
-                  professionals.slice(0, 5).map((professional) => (
-                    <div key={professional.id} className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
+                  </div> : professionals.slice(0, 5).map(professional => <div key={professional.id} className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
                       <div>
                         <h4 className="font-medium text-foreground">{professional.name}</h4>
                         <div className="flex items-center space-x-4 mt-1 text-sm text-muted-foreground">
@@ -416,9 +403,7 @@ export default function Admin() {
                           {new Date(professional.created_at).toLocaleDateString()}
                         </div>
                       </div>
-                    </div>
-                  ))
-                )}
+                    </div>)}
               </div>
             </CardContent>
           </Card>
@@ -441,15 +426,11 @@ export default function Admin() {
                     </tr>
                   </thead>
                   <tbody>
-                    {quoteRequests.length === 0 ? (
-                      <tr>
+                    {quoteRequests.length === 0 ? <tr>
                         <td colSpan={5} className="py-8 text-center text-muted-foreground">
                           No quote requests yet.
                         </td>
-                      </tr>
-                    ) : (
-                      quoteRequests.map((quote) => (
-                        <tr key={quote.id} className="border-b border-border">
+                      </tr> : quoteRequests.map(quote => <tr key={quote.id} className="border-b border-border">
                           <td className="py-4 font-medium text-foreground">{quote.service}</td>
                           <td className="py-4 text-muted-foreground">{quote.location}</td>
                           <td className="py-4 text-foreground font-medium">{quote.budget || "Not specified"}</td>
@@ -461,9 +442,7 @@ export default function Admin() {
                               New
                             </Badge>
                           </td>
-                        </tr>
-                      ))
-                    )}
+                        </tr>)}
                   </tbody>
                 </table>
               </div>
@@ -480,13 +459,9 @@ export default function Admin() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {contactRequests.length === 0 ? (
-                  <div className="text-center py-8 text-muted-foreground">
+                {contactRequests.length === 0 ? <div className="text-center py-8 text-muted-foreground">
                     No contact requests yet.
-                  </div>
-                ) : (
-                  contactRequests.map((contact) => (
-                    <div key={contact.id} className="p-4 bg-muted/50 rounded-lg">
+                  </div> : contactRequests.map(contact => <div key={contact.id} className="p-4 bg-muted/50 rounded-lg">
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
                           <h4 className="font-medium text-foreground">{contact.client_name}</h4>
@@ -505,9 +480,7 @@ export default function Admin() {
                           </div>
                         </div>
                       </div>
-                    </div>
-                  ))
-                )}
+                    </div>)}
               </div>
             </CardContent>
           </Card>
@@ -522,28 +495,15 @@ export default function Admin() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {reviews.length === 0 ? (
-                  <div className="text-center py-8 text-muted-foreground">
+                {reviews.length === 0 ? <div className="text-center py-8 text-muted-foreground">
                     No reviews yet.
-                  </div>
-                ) : (
-                  reviews.map((review) => (
-                    <div key={review.id} className="p-4 bg-muted/50 rounded-lg">
+                  </div> : reviews.map(review => <div key={review.id} className="p-4 bg-muted/50 rounded-lg">
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
                           <div className="flex items-center space-x-2">
                             <h4 className="font-medium text-foreground">{review.client_name}</h4>
                             <div className="flex items-center">
-                              {[...Array(5)].map((_, i) => (
-                                <Star
-                                  key={i}
-                                  className={`h-3 w-3 ${
-                                    i < review.rating 
-                                      ? 'text-yellow-400 fill-current' 
-                                      : 'text-muted-foreground'
-                                  }`}
-                                />
-                              ))}
+                              {[...Array(5)].map((_, i) => <Star key={i} className={`h-3 w-3 ${i < review.rating ? 'text-yellow-400 fill-current' : 'text-muted-foreground'}`} />)}
                             </div>
                           </div>
                           <div className="flex items-center space-x-2 mt-1">
@@ -558,9 +518,7 @@ export default function Admin() {
                           </div>
                         </div>
                       </div>
-                    </div>
-                  ))
-                )}
+                    </div>)}
               </div>
             </CardContent>
           </Card>
@@ -573,8 +531,7 @@ export default function Admin() {
                   <Users className="mr-2 h-5 w-5" />
                   Professional Management
                 </CardTitle>
-                {professionals.length > 0 && (
-                  <AlertDialog>
+                {professionals.length > 0 && <AlertDialog>
                     <AlertDialogTrigger asChild>
                       <Button variant="destructive" size="sm">
                         <Trash2 className="h-4 w-4 mr-2" />
@@ -591,27 +548,19 @@ export default function Admin() {
                       </AlertDialogHeader>
                       <AlertDialogFooter>
                         <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction 
-                          onClick={deleteAllProfessionals}
-                          className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                        >
+                        <AlertDialogAction onClick={deleteAllProfessionals} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
                           Delete All Professionals
                         </AlertDialogAction>
                       </AlertDialogFooter>
                     </AlertDialogContent>
-                  </AlertDialog>
-                )}
+                  </AlertDialog>}
               </div>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {professionals.length === 0 ? (
-                  <div className="text-center py-8 text-muted-foreground">
+                {professionals.length === 0 ? <div className="text-center py-8 text-muted-foreground">
                     No professionals registered yet.
-                  </div>
-                ) : (
-                  professionals.map((professional) => (
-                    <div key={professional.id} className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
+                  </div> : professionals.map(professional => <div key={professional.id} className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
                       <div className="flex-1">
                         <div className="flex items-center space-x-4">
                           <div>
@@ -624,10 +573,7 @@ export default function Admin() {
                               <Badge variant="outline" className="text-xs">
                                 {professional.specialty}
                               </Badge>
-                              <Badge 
-                                variant={professional.status === 'approved' ? 'default' : 'secondary'}
-                                className="text-xs"
-                              >
+                              <Badge variant={professional.status === 'approved' ? 'default' : 'secondary'} className="text-xs">
                                 {professional.status}
                               </Badge>
                             </div>
@@ -664,23 +610,17 @@ export default function Admin() {
                                   <h4 className="font-medium text-sm text-muted-foreground mb-1">Professional Details</h4>
                                   <div className="space-y-2">
                                     <p className="text-sm"><span className="font-medium">Specialty:</span> {professional.specialty}</p>
-                                    {professional.location && (
-                                      <p className="text-sm flex items-center">
+                                    {professional.location && <p className="text-sm flex items-center">
                                         <MapPin className="h-3 w-3 mr-1" />
                                         {professional.location}
-                                      </p>
-                                    )}
-                                    {professional.hourly_rate && (
-                                      <p className="text-sm flex items-center">
+                                      </p>}
+                                    {professional.hourly_rate && <p className="text-sm flex items-center">
                                         <DollarSign className="h-3 w-3 mr-1" />
                                         {professional.hourly_rate}
-                                      </p>
-                                    )}
-                                    {professional.experience && (
-                                      <p className="text-sm">
+                                      </p>}
+                                    {professional.experience && <p className="text-sm">
                                         <span className="font-medium">Experience:</span> {professional.experience}
-                                      </p>
-                                    )}
+                                      </p>}
                                   </div>
                                 </div>
                               </div>
@@ -690,10 +630,7 @@ export default function Admin() {
                                   <h4 className="font-medium text-sm text-muted-foreground mb-1">Status & Dates</h4>
                                   <div className="space-y-2">
                                     <div className="flex items-center">
-                                      <Badge 
-                                        variant={professional.status === 'approved' ? 'default' : 'secondary'}
-                                        className="text-xs"
-                                      >
+                                      <Badge variant={professional.status === 'approved' ? 'default' : 'secondary'} className="text-xs">
                                         {professional.status}
                                       </Badge>
                                     </div>
@@ -708,15 +645,13 @@ export default function Admin() {
                                   </div>
                                 </div>
                                 
-                                {professional.description && (
-                                  <div>
+                                {professional.description && <div>
                                     <h4 className="font-medium text-sm text-muted-foreground mb-1 flex items-center">
                                       <FileText className="h-3 w-3 mr-1" />
                                       Description
                                     </h4>
                                     <p className="text-sm text-muted-foreground">{professional.description}</p>
-                                  </div>
-                                )}
+                                  </div>}
                               </div>
                             </div>
                           </DialogContent>
@@ -740,19 +675,14 @@ export default function Admin() {
                             </AlertDialogHeader>
                             <AlertDialogFooter>
                               <AlertDialogCancel>Cancel</AlertDialogCancel>
-                              <AlertDialogAction 
-                                onClick={() => deleteProfessional(professional.id)}
-                                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                              >
+                              <AlertDialogAction onClick={() => deleteProfessional(professional.id)} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
                                 Delete Professional
                               </AlertDialogAction>
                             </AlertDialogFooter>
                           </AlertDialogContent>
                         </AlertDialog>
                       </div>
-                    </div>
-                  ))
-                )}
+                    </div>)}
               </div>
             </CardContent>
           </Card>
