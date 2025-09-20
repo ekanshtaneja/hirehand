@@ -39,7 +39,7 @@ export default function Quotes() {
       rating: 4.5 + Math.random() * 0.5, // Random rating between 4.5-5.0
       reviewCount: Math.floor(Math.random() * 100) + 20, // Random reviews 20-120
       serviceStyle: Math.random() > 0.5 ? "Labor-based" : "Machine-assisted",
-      startingPrice: prof.hourly_rate ? (parseInt(prof.hourly_rate.replace(/[^0-9]/g, '')) || 200) * 80 : 16000,
+      startingPrice: prof.hourly_rate ? (parseInt(prof.hourly_rate.replace(/[^0-9]/g, '')) || 50) * 10 : 500,
       portfolioImages: ["/placeholder.svg"],
       specialty: prof.specialty || 'General Services',
       bio: prof.description || 'Professional service provider with years of experience.',
@@ -55,7 +55,7 @@ export default function Quotes() {
       if (filters.location && !provider.location.toLowerCase().includes(filters.location.toLowerCase())) {
         return false;
       }
-      if (provider.startingPrice > filters.maxBudget[0]) {
+      if (provider.startingPrice > filters.maxBudget[0] * 5) {
         return false;
       }
       if (filters.serviceStyle && provider.serviceStyle !== filters.serviceStyle) {
@@ -122,7 +122,7 @@ export default function Quotes() {
                 {/* Budget */}
                 <div>
                   <Label className="text-sm font-medium">
-                    Maximum Budget: ₹{filters.maxBudget[0] * 80}
+                    Maximum Budget: ₹{filters.maxBudget[0] * 5}
                   </Label>
                   <Slider
                     value={filters.maxBudget}
@@ -133,8 +133,8 @@ export default function Quotes() {
                     className="mt-4"
                   />
                   <div className="flex justify-between text-xs text-muted-foreground mt-1">
-                    <span>₹8,000</span>
-                    <span>₹80,000+</span>
+                    <span>₹500</span>
+                    <span>₹5,000+</span>
                   </div>
                 </div>
 
