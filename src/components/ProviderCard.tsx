@@ -62,7 +62,7 @@ export const ProviderCard = ({
           </div>
           <div className="text-right">
             <div className="text-2xl font-bold text-primary">
-              ${startingPrice}
+              ₹{startingPrice.toLocaleString('en-IN')}
             </div>
             <div className="text-sm text-muted-foreground">starting</div>
           </div>
