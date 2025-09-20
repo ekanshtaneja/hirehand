@@ -173,7 +173,7 @@ export type Database = {
           comment: string | null
           created_at: string
           id: string
-          professional_id: string
+          professional_id: string | null
           rating: number
           updated_at: string
         }
@@ -183,7 +183,7 @@ export type Database = {
           comment?: string | null
           created_at?: string
           id?: string
-          professional_id: string
+          professional_id?: string | null
           rating: number
           updated_at?: string
         }
@@ -193,7 +193,7 @@ export type Database = {
           comment?: string | null
           created_at?: string
           id?: string
-          professional_id?: string
+          professional_id?: string | null
           rating?: number
           updated_at?: string
         }

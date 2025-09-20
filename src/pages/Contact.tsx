@@ -105,7 +105,7 @@ export default function Contact() {
           client_email: reviewData.email,
           rating: parseInt(reviewData.rating),
           comment: reviewData.review,
-          professional_id: '00000000-0000-0000-0000-000000000000' // General review, not for specific professional
+          professional_id: null // General platform review
         });
 
       if (error) {
