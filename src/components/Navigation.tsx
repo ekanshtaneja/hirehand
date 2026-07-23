@@ -24,11 +24,11 @@ export const Navigation = () => {
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2 group">
             <img 
-              src="/lovable-uploads/f79fa9ee-03b6-4aee-9caa-8ec0cbc158f6.png" 
-              alt="HireHand Construction Logo" 
-              className="h-10 w-10 group-hover:scale-105 transition-smooth"
+              src="/buildmates-logo.jpg" 
+              alt="BuildMates Construction Logo" 
+              className="h-10 w-10 rounded group-hover:scale-105 transition-smooth"
             />
-            <span className="text-xl font-bold text-foreground">HireHand</span>
+            <span className="text-xl font-bold text-foreground">BuildMates</span>
           </Link>
 
           {/* Desktop Navigation */}
