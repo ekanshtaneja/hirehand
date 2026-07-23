@@ -26,7 +26,7 @@ const services = [
     description: "Interior and exterior painting services with premium materials and expert craftsmanship.",
     icon: Paintbrush,
     image: paintingImg,
-    price: "From ₹16,000",
+    price: "From ₹1,000",
   },
   {
     id: "carpentry",
@@ -34,7 +34,7 @@ const services = [
     description: "Custom woodwork, furniture, cabinets, and structural carpentry by skilled artisans.",
     icon: Hammer,
     image: carpentryImg,
-    price: "From ₹24,000",
+    price: "From ₹1,500",
   },
   {
     id: "electrical",
@@ -42,7 +42,7 @@ const services = [
     description: "Safe and certified electrical installations, repairs, and maintenance services.",
     icon: Zap,
     image: electricalImg,
-    price: "From ₹12,000",
+    price: "From ₹1,200",
   },
   {
     id: "plumbing",
@@ -50,7 +50,7 @@ const services = [
     description: "Professional plumbing services for repairs, installations, and emergency fixes.",
     icon: Wrench,
     image: plumbingImg,
-    price: "From ₹9,600",
+    price: "From ₹900",
   },
   {
     id: "masonry",
@@ -58,7 +58,7 @@ const services = [
     description: "Expert brickwork, stonework, and concrete services for durable construction.",
     icon: Building2,
     image: masonryImg,
-    price: "From ₹32,000",
+    price: "From ₹1,800",
   },
   {
     id: "interior-design",
@@ -66,7 +66,7 @@ const services = [
     description: "Transform your space with professional interior design and decoration services.",
     icon: Palette,
     image: interiorImg,
-    price: "From ₹40,000",
+    price: "From ₹2,000",
   },
 ];
 
