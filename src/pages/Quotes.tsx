@@ -42,8 +42,8 @@ export default function Quotes() {
       specialty: prof.specialty || 'General Services',
       bio: prof.description || 'Professional service provider with years of experience.',
       experience: prof.experience || undefined,
-      email: prof.email,
-      phone: prof.phone || undefined,
+      email: undefined,
+      phone: undefined,
     }));
   }, [professionals]);
 
