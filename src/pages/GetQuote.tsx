@@ -27,7 +27,7 @@ const getAIPrice = async (data: any): Promise<{price: string, justification: str
   const multiplier = data.style === "machine-assisted" ? 0.8 : 1.2;
   const locationFactor = data.location.toLowerCase().includes("city") ? 1.3 : 1;
 
-  const INR_PER_USD = 80;
+  const INR_PER_USD = 5;
   const minPrice = Math.round(basePrice * multiplier * locationFactor) * INR_PER_USD;
   const maxPrice = Math.round(minPrice * 1.8);
 
