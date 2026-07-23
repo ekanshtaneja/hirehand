@@ -44,7 +44,7 @@ export default function Team() {
               Our Mission
             </h2>
             <p className="text-lg text-muted-foreground leading-relaxed max-w-4xl mx-auto">
-              At HireHand, we believe that finding reliable construction professionals shouldn't be 
+              At BuildMates, we believe that finding reliable construction professionals shouldn't be 
               a gamble. Our platform combines rigorous vetting, transparent pricing, and 
               technology-driven matching to create a marketplace where quality work meets 
               trusted professionals. We're building the future of home improvement, one project at a time.

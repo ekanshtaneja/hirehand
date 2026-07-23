@@ -131,7 +131,7 @@ export default function RegisterProfessional() {
               Application Submitted!
             </h1>
             <p className="text-muted-foreground text-lg mb-8">
-              Thank you for your interest in joining the HireHand professional network. 
+              Thank you for your interest in joining the BuildMates professional network. 
               We'll review your application and contact you within 2-3 business days.
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
@@ -150,7 +150,7 @@ export default function RegisterProfessional() {
                   Contact our professional support team:
                 </p>
                 <div className="text-sm text-muted-foreground">
-                  <div>📧 pros@hirehand.com</div>
+                  <div>📧 pros@buildmates.com</div>
                   <div>📞 (555) 123-4567</div>
                 </div>
               </div>
