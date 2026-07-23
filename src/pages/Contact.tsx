@@ -148,7 +148,7 @@ export default function Contact() {
               Message Received!
             </h1>
             <p className="text-muted-foreground mb-8">
-              Thank you for contacting HireHand. We'll review your message 
+              Thank you for contacting BuildMates. We'll review your message 
               and get back to you within 24 hours.
             </p>
             <Button onClick={() => setIsSubmitted(false)} variant="outline">
@@ -221,7 +221,7 @@ export default function Contact() {
                   Leave a Review
                 </CardTitle>
                 <p className="text-muted-foreground">
-                  Share your experience with HireHand to help us improve our services.
+                  Share your experience with BuildMates to help us improve our services.
                 </p>
               </CardHeader>
               <CardContent>
@@ -270,7 +270,7 @@ export default function Contact() {
                     <Textarea id="review" value={reviewData.review} onChange={e => setReviewData({
                     ...reviewData,
                     review: e.target.value
-                  })} placeholder="Tell us about your experience with HireHand..." className="mt-2 min-h-[120px]" required />
+                  })} placeholder="Tell us about your experience with BuildMates..." className="mt-2 min-h-[120px]" required />
                   </div>
 
                   <Button type="submit" className="w-full" size="lg">

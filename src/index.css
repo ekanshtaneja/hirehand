@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* HireHand Construction Marketplace Design System */
+/* BuildMates Construction Marketplace Design System */
 
 @layer base {
   :root {
@@ -91,7 +91,7 @@
   }
 }
 
-/* Custom utility classes for HireHand */
+/* Custom utility classes for BuildMates */
 @layer components {
   .gradient-hero {
     background: var(--gradient-hero);

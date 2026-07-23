@@ -295,7 +295,7 @@ export default function Admin() {
             Admin Dashboard
           </h1>
           <p className="text-muted-foreground">
-            Monitor platform activity and manage the HireHand marketplace.
+            Monitor platform activity and manage the BuildMates marketplace.
           </p>
         </div>
 
