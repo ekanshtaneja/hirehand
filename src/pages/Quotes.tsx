@@ -12,7 +12,7 @@ import { supabase } from "@/integrations/supabase/client";
 const fetchProfessionals = async () => {
   const { data, error } = await supabase
     .from('professionals')
-    .select('*')
+    .select('id,name,location,hourly_rate,specialty,description,experience,status,created_at')
     .order('created_at', { ascending: false });
   if (error) throw error;
   return data || [];
