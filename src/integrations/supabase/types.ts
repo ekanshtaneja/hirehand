@@ -14,13 +14,217 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      analytics: {
+        Row: {
+          created_at: string | null
+          id: string
+          page_path: string | null
+          visitor_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          page_path?: string | null
+          visitor_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          page_path?: string | null
+          visitor_id?: string | null
+        }
+        Relationships: []
+      }
+      contact_requests: {
+        Row: {
+          client_email: string
+          client_name: string
+          created_at: string | null
+          id: string
+          message: string | null
+          professional_id: string | null
+          status: string | null
+        }
+        Insert: {
+          client_email: string
+          client_name: string
+          created_at?: string | null
+          id?: string
+          message?: string | null
+          professional_id?: string | null
+          status?: string | null
+        }
+        Update: {
+          client_email?: string
+          client_name?: string
+          created_at?: string | null
+          id?: string
+          message?: string | null
+          professional_id?: string | null
+          status?: string | null
+        }
+        Relationships: []
+      }
+      professionals: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          email: string
+          experience: string | null
+          hourly_rate: string | null
+          id: string
+          location: string | null
+          name: string
+          phone: string | null
+          specialty: string | null
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          email: string
+          experience?: string | null
+          hourly_rate?: string | null
+          id?: string
+          location?: string | null
+          name: string
+          phone?: string | null
+          specialty?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          email?: string
+          experience?: string | null
+          hourly_rate?: string | null
+          id?: string
+          location?: string | null
+          name?: string
+          phone?: string | null
+          specialty?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      quote_requests: {
+        Row: {
+          budget: string | null
+          created_at: string | null
+          description: string | null
+          email: string
+          id: string
+          location: string | null
+          name: string
+          service: string | null
+        }
+        Insert: {
+          budget?: string | null
+          created_at?: string | null
+          description?: string | null
+          email: string
+          id?: string
+          location?: string | null
+          name: string
+          service?: string | null
+        }
+        Update: {
+          budget?: string | null
+          created_at?: string | null
+          description?: string | null
+          email?: string
+          id?: string
+          location?: string | null
+          name?: string
+          service?: string | null
+        }
+        Relationships: []
+      }
+      reviews: {
+        Row: {
+          client_email: string
+          client_name: string
+          comment: string | null
+          created_at: string | null
+          id: string
+          professional_id: string | null
+          rating: number | null
+        }
+        Insert: {
+          client_email: string
+          client_name: string
+          comment?: string | null
+          created_at?: string | null
+          id?: string
+          professional_id?: string | null
+          rating?: number | null
+        }
+        Update: {
+          client_email?: string
+          client_name?: string
+          comment?: string | null
+          created_at?: string | null
+          id?: string
+          professional_id?: string | null
+          rating?: number | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      admin_delete_all_professionals: { Args: never; Returns: number }
+      admin_delete_professional: {
+        Args: { professional_id: string }
+        Returns: undefined
+      }
+      admin_get_professionals: {
+        Args: never
+        Returns: {
+          created_at: string | null
+          description: string | null
+          email: string
+          experience: string | null
+          hourly_rate: string | null
+          id: string
+          location: string | null
+          name: string
+          phone: string | null
+          specialty: string | null
+          status: string | null
+          updated_at: string | null
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "professionals"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
+      admin_get_quote_requests: {
+        Args: never
+        Returns: {
+          budget: string | null
+          created_at: string | null
+          description: string | null
+          email: string
+          id: string
+          location: string | null
+          name: string
+          service: string | null
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "quote_requests"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
     }
     Enums: {
       [_ in never]: never
