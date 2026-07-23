@@ -6,61 +6,62 @@
 
 @layer base {
   :root {
-    /* Construction-themed color palette */
-    --background: 43 15% 98%;
-    --foreground: 220 15% 12%;
+    /* Construction-themed dark color palette */
+    --background: 220 25% 8%;
+    --foreground: 43 15% 95%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 220 15% 12%;
+    --card: 220 25% 11%;
+    --card-foreground: 43 15% 95%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 220 15% 12%;
+    --popover: 220 25% 11%;
+    --popover-foreground: 43 15% 95%;
 
     /* Construction orange primary */
-    --primary: 25 95% 53%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 25 95% 55%;
+    --primary-foreground: 220 25% 8%;
     --primary-glow: 25 100% 65%;
 
     /* Deep construction blue secondary */
-    --secondary: 220 25% 25%;
-    --secondary-foreground: 0 0% 100%;
+    --secondary: 220 20% 18%;
+    --secondary-foreground: 43 15% 95%;
 
     /* Warm earth tones */
-    --muted: 43 15% 95%;
-    --muted-foreground: 220 15% 45%;
+    --muted: 220 15% 14%;
+    --muted-foreground: 43 10% 65%;
 
-    --accent: 43 30% 88%;
-    --accent-foreground: 220 25% 15%;
+    --accent: 220 15% 18%;
+    --accent-foreground: 43 15% 95%;
 
-    --destructive: 0 84% 60%;
+    --destructive: 0 75% 55%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 43 15% 88%;
-    --input: 43 15% 92%;
-    --ring: 25 95% 53%;
+    --border: 220 15% 20%;
+    --input: 220 15% 16%;
+    --ring: 25 95% 55%;
 
     --radius: 0.75rem;
 
     /* Construction-specific colors */
     --construction-yellow: 45 95% 58%;
-    --construction-steel: 215 15% 35%;
-    --construction-earth: 30 25% 45%;
-    --construction-safety: 120 85% 45%;
+    --construction-steel: 215 15% 45%;
+    --construction-earth: 30 25% 55%;
+    --construction-safety: 120 70% 50%;
 
     /* Gradients */
     --gradient-hero: linear-gradient(135deg, hsl(25 95% 53%), hsl(25 100% 65%));
-    --gradient-service: linear-gradient(145deg, hsl(220 25% 25%), hsl(220 20% 35%));
-    --gradient-accent: linear-gradient(120deg, hsl(43 30% 88%), hsl(43 40% 92%));
-    
+    --gradient-service: linear-gradient(145deg, hsl(220 25% 14%), hsl(220 20% 20%));
+    --gradient-accent: linear-gradient(120deg, hsl(220 20% 14%), hsl(220 15% 18%));
+
     /* Shadows */
-    --shadow-construction: 0 10px 40px -10px hsl(25 95% 53% / 0.3);
-    --shadow-card: 0 4px 20px -4px hsl(220 15% 12% / 0.1);
-    --shadow-elevated: 0 20px 60px -10px hsl(220 15% 12% / 0.15);
+    --shadow-construction: 0 10px 40px -10px hsl(25 95% 53% / 0.4);
+    --shadow-card: 0 4px 20px -4px hsl(0 0% 0% / 0.5);
+    --shadow-elevated: 0 20px 60px -10px hsl(0 0% 0% / 0.6);
 
     /* Animations */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-spring: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
+
 
   .dark {
     --background: 220 25% 8%;
