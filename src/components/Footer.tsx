@@ -64,7 +64,7 @@ export const Footer = () => {
         </div>
 
         <div className="border-t border-white/20 mt-8 pt-8 text-center text-white/60">
-          <p>&copy; 2024 HireHand. All rights reserved. Built with care for construction professionals.</p>
+          <p>&copy; 2024 BuildMates. All rights reserved. Built with care for construction professionals.</p>
         </div>
       </div>
     </footer>;
