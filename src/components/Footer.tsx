@@ -7,8 +7,8 @@ export const Footer = () => {
           {/* Brand */}
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center space-x-2 mb-4">
-              <img src="/lovable-uploads/f79fa9ee-03b6-4aee-9caa-8ec0cbc158f6.png" alt="HireHand Construction Logo" className="h-8 w-8" />
-              <span className="text-xl font-bold">HireHand</span>
+              <img src="/buildmates-logo.jpg" alt="BuildMates Construction Logo" className="h-8 w-8 rounded" />
+              <span className="text-xl font-bold">BuildMates</span>
             </div>
             <p className="text-white/80 mb-4 max-w-md">
               Connecting homeowners with trusted construction professionals. 
