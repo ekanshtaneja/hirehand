@@ -10,31 +10,28 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "13.0.4"
+    PostgrestVersion: "14.5"
   }
   public: {
     Tables: {
       analytics: {
         Row: {
-          created_at: string
+          created_at: string | null
           id: string
-          page_path: string
-          user_agent: string | null
-          visitor_ip: string | null
+          page_path: string | null
+          visitor_id: string | null
         }
         Insert: {
-          created_at?: string
+          created_at?: string | null
           id?: string
-          page_path: string
-          user_agent?: string | null
-          visitor_ip?: string | null
+          page_path?: string | null
+          visitor_id?: string | null
         }
         Update: {
-          created_at?: string
+          created_at?: string | null
           id?: string
-          page_path?: string
-          user_agent?: string | null
-          visitor_ip?: string | null
+          page_path?: string | null
+          visitor_id?: string | null
         }
         Relationships: []
       }
@@ -42,49 +39,35 @@ export type Database = {
         Row: {
           client_email: string
           client_name: string
-          client_phone: string | null
-          created_at: string
+          created_at: string | null
           id: string
-          message: string
-          professional_id: string
-          status: string
-          updated_at: string
+          message: string | null
+          professional_id: string | null
+          status: string | null
         }
         Insert: {
           client_email: string
           client_name: string
-          client_phone?: string | null
-          created_at?: string
+          created_at?: string | null
           id?: string
-          message: string
-          professional_id: string
-          status?: string
-          updated_at?: string
+          message?: string | null
+          professional_id?: string | null
+          status?: string | null
         }
         Update: {
           client_email?: string
           client_name?: string
-          client_phone?: string | null
-          created_at?: string
+          created_at?: string | null
           id?: string
-          message?: string
-          professional_id?: string
-          status?: string
-          updated_at?: string
+          message?: string | null
+          professional_id?: string | null
+          status?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "contact_requests_professional_id_fkey"
-            columns: ["professional_id"]
-            isOneToOne: false
-            referencedRelation: "professionals"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       professionals: {
         Row: {
-          created_at: string
+          created_at: string | null
           description: string | null
           email: string
           experience: string | null
@@ -93,12 +76,12 @@ export type Database = {
           location: string | null
           name: string
           phone: string | null
-          specialty: string
-          status: string
-          updated_at: string
+          specialty: string | null
+          status: string | null
+          updated_at: string | null
         }
         Insert: {
-          created_at?: string
+          created_at?: string | null
           description?: string | null
           email: string
           experience?: string | null
@@ -107,12 +90,12 @@ export type Database = {
           location?: string | null
           name: string
           phone?: string | null
-          specialty: string
-          status?: string
-          updated_at?: string
+          specialty?: string | null
+          status?: string | null
+          updated_at?: string | null
         }
         Update: {
-          created_at?: string
+          created_at?: string | null
           description?: string | null
           email?: string
           experience?: string | null
@@ -121,48 +104,42 @@ export type Database = {
           location?: string | null
           name?: string
           phone?: string | null
-          specialty?: string
-          status?: string
-          updated_at?: string
+          specialty?: string | null
+          status?: string | null
+          updated_at?: string | null
         }
         Relationships: []
       }
       quote_requests: {
         Row: {
           budget: string | null
-          created_at: string
+          created_at: string | null
           description: string | null
           email: string
           id: string
-          location: string
+          location: string | null
           name: string
-          phone: string | null
-          service: string
-          updated_at: string
+          service: string | null
         }
         Insert: {
           budget?: string | null
-          created_at?: string
+          created_at?: string | null
           description?: string | null
           email: string
           id?: string
-          location: string
+          location?: string | null
           name: string
-          phone?: string | null
-          service: string
-          updated_at?: string
+          service?: string | null
         }
         Update: {
           budget?: string | null
-          created_at?: string
+          created_at?: string | null
           description?: string | null
           email?: string
           id?: string
-          location?: string
+          location?: string | null
           name?: string
-          phone?: string | null
-          service?: string
-          updated_at?: string
+          service?: string | null
         }
         Relationships: []
       }
@@ -171,105 +148,82 @@ export type Database = {
           client_email: string
           client_name: string
           comment: string | null
-          created_at: string
+          created_at: string | null
           id: string
           professional_id: string | null
-          rating: number
-          updated_at: string
+          rating: number | null
         }
         Insert: {
           client_email: string
           client_name: string
           comment?: string | null
-          created_at?: string
+          created_at?: string | null
           id?: string
           professional_id?: string | null
-          rating: number
-          updated_at?: string
+          rating?: number | null
         }
         Update: {
           client_email?: string
           client_name?: string
           comment?: string | null
-          created_at?: string
+          created_at?: string | null
           id?: string
           professional_id?: string | null
-          rating?: number
-          updated_at?: string
+          rating?: number | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "reviews_professional_id_fkey"
-            columns: ["professional_id"]
-            isOneToOne: false
-            referencedRelation: "professionals"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      admin_delete_all_professionals: {
-        Args: Record<PropertyKey, never>
-        Returns: number
-      }
+      admin_delete_all_professionals: { Args: never; Returns: number }
       admin_delete_professional: {
         Args: { professional_id: string }
         Returns: undefined
       }
       admin_get_professionals: {
-        Args: Record<PropertyKey, never>
+        Args: never
         Returns: {
-          created_at: string
-          description: string
+          created_at: string | null
+          description: string | null
           email: string
-          experience: string
-          hourly_rate: string
+          experience: string | null
+          hourly_rate: string | null
           id: string
-          location: string
+          location: string | null
           name: string
-          phone: string
-          specialty: string
-          status: string
-          updated_at: string
+          phone: string | null
+          specialty: string | null
+          status: string | null
+          updated_at: string | null
         }[]
+        SetofOptions: {
+          from: "*"
+          to: "professionals"
+          isOneToOne: false
+          isSetofReturn: true
+        }
       }
       admin_get_quote_requests: {
-        Args: Record<PropertyKey, never>
+        Args: never
         Returns: {
-          budget: string
-          created_at: string
-          description: string
+          budget: string | null
+          created_at: string | null
+          description: string | null
           email: string
           id: string
-          location: string
+          location: string | null
           name: string
-          phone: string
-          service: string
-          updated_at: string
+          service: string | null
         }[]
-      }
-      admin_update_professional_status: {
-        Args: { new_status: string; professional_id: string }
-        Returns: undefined
-      }
-      list_approved_professionals: {
-        Args: Record<PropertyKey, never>
-        Returns: {
-          created_at: string
-          description: string
-          experience: string
-          hourly_rate: string
-          id: string
-          location: string
-          name: string
-          specialty: string
-          status: string
-          updated_at: string
-        }[]
+        SetofOptions: {
+          from: "*"
+          to: "quote_requests"
+          isOneToOne: false
+          isSetofReturn: true
+        }
       }
     }
     Enums: {
