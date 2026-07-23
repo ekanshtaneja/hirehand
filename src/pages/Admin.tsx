@@ -9,7 +9,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Users, UserPlus, Eye, BarChart3, TrendingUp, Clock, Mail, Shield, Trash2, User, MapPin, DollarSign, Calendar, FileText, MessageSquare, Star } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-const ADMIN_PASSWORD = "admin123"; // In real app, this would be properly secured
+const ADMIN_PASSWORD = "thebuildmates"; // In real app, this would be properly secured
 
 type Professional = {
   id: string;
